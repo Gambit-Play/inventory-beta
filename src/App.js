@@ -1,26 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import Box from '@material-ui/core/Box';
+
+import SideMenu from './components/Layouts/SideMenu/SideMenu.Component';
+import EnhancedTable from './components/Lists/EnhancedTable/EnhancedTable.Component';
+
+import useStyles from './App.Styles';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const classes = useStyles();
+
+	return (
+		<Box className={classes.root}>
+			<SideMenu>
+				<Box className={classes.content}>
+					<EnhancedTable />
+				</Box>
+			</SideMenu>
+		</Box>
+	);
 }
 
 export default App;
