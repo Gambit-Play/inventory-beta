@@ -4,6 +4,7 @@ import Box from '@material-ui/core/Box';
 
 import SideMenu from './components/Layouts/SideMenu/SideMenu.Component';
 import EnhancedTable from './components/Lists/EnhancedTable/EnhancedTable.Component';
+import Detail from './components/Details/Detail.Component';
 
 import useStyles from './App.Styles';
 

@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Badge from '@material-ui/core/Badge';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
+import Avatar from '@material-ui/core/Avatar';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
@@ -63,6 +64,12 @@ const SideMenu = ({ children }) => {
 							<NotificationsIcon />
 						</Badge>
 					</IconButton>
+					<Avatar
+						alt='Remy Sharp'
+						src='https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
+						className={classes.avatar}
+					/>
+					<Typography>Amanda Nunez</Typography>
 				</Toolbar>
 			</AppBar>
 			<Drawer

@@ -61,6 +61,11 @@ const useStyles = makeStyles(theme => ({
 		justifyContent: 'flex-end',
 		padding: '0 8px',
 		...theme.mixins.toolbar
+	},
+	avatar: {
+		marginLeft: theme.spacing(2),
+		marginRight: theme.spacing(1),
+		boxShadow: theme.shadows[4]
 	}
 }));
 
