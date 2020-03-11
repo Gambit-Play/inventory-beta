@@ -63,9 +63,20 @@ const useStyles = makeStyles(theme => ({
 		...theme.mixins.toolbar
 	},
 	avatar: {
-		marginLeft: theme.spacing(2),
 		marginRight: theme.spacing(1),
 		boxShadow: theme.shadows[4]
+	},
+	dividerToolbar: {
+		backgroundColor: 'rgba(255, 255, 255, 0.24)',
+		marginLeft: theme.spacing(3),
+		marginRight: theme.spacing(3)
+	},
+	content: {
+		padding: 24,
+		marginTop: 64,
+		maxHeight: 'calc(100vh - 64px)',
+		overflow: 'auto',
+		width: '100%'
 	}
 }));
 

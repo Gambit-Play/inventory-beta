@@ -1,7 +1,3 @@
-export function createData(name, calories, fat, carbs, protein) {
-	return { name, calories, fat, carbs, protein };
-}
-
 export function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
 		return -1;

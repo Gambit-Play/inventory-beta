@@ -1,6 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
 
+import SideMenuList from './SideMenuList.Component';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,12 +12,11 @@ import Badge from '@material-ui/core/Badge';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-
-import SideMenuList from './SideMenuList.Component';
 
 import useStyles from './SideMenu.Styles';
 
@@ -64,6 +65,11 @@ const SideMenu = ({ children }) => {
 							<NotificationsIcon />
 						</Badge>
 					</IconButton>
+					<Divider
+						orientation='vertical'
+						flexItem
+						className={classes.dividerToolbar}
+					/>
 					<Avatar
 						alt='Remy Sharp'
 						src='https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
@@ -90,7 +96,7 @@ const SideMenu = ({ children }) => {
 				<Divider />
 				<SideMenuList />
 			</Drawer>
-			{children}
+			<Box className={classes.content}>{children}</Box>
 		</div>
 	);
 };
