@@ -1,5 +1,6 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import withRouter from 'react-router-dom/withRouter';
+import Link from 'react-router-dom/Link';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -16,24 +17,44 @@ import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
 const MainListItems = props => {
-	const { history } = props;
-	console.log(history);
+	const { location } = props;
+	const isCurrent = linkLocation => {
+		if (linkLocation === location.pathname) return true;
+
+		return false;
+	};
+	console.log(location);
 
 	return (
 		<div>
-			<ListItem button onClick={() => history.push('/detail')}>
+			<ListItem
+				selected={isCurrent('/detail') ? true : false}
+				button
+				component={Link}
+				to='/detail'
+			>
 				<ListItemIcon>
 					<DashboardIcon />
 				</ListItemIcon>
 				<ListItemText primary='Detail' />
 			</ListItem>
-			<ListItem button onClick={() => history.push('/tables')}>
+			<ListItem
+				selected={isCurrent('/tables') ? true : false}
+				button
+				component={Link}
+				to='/tables'
+			>
 				<ListItemIcon>
 					<ShoppingCartIcon />
 				</ListItemIcon>
 				<ListItemText primary='Tables' />
 			</ListItem>
-			<ListItem button onClick={() => history.push('/list')}>
+			<ListItem
+				selected={isCurrent('/list') ? true : false}
+				button
+				component={Link}
+				to='/list'
+			>
 				<ListItemIcon>
 					<PeopleIcon />
 				</ListItemIcon>
@@ -79,12 +100,16 @@ const SecondaryListItems = (
 	</div>
 );
 
-const SideMenuList = ({ history }) => {
+const SideMenuList = ({ match, location, history }) => {
 	return (
 		<React.Fragment>
 			<List>
 				{' '}
-				<MainListItems history={history} />{' '}
+				<MainListItems
+					history={history}
+					match={match}
+					location={location}
+				/>{' '}
 			</List>
 			<Divider />
 			<List> {SecondaryListItems} </List>
