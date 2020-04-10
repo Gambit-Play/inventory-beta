@@ -14,6 +14,9 @@ import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
+// Firebase
+import { signInWithGoogle } from '../../../firebase/firebase.utils';
+
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -74,6 +77,7 @@ const SideMenu = ({ children }) => {
 						alt='Remy Sharp'
 						src='https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
 						className={classes.avatar}
+						onClick={signInWithGoogle}
 					/>
 					<Typography>Amanda Nunez</Typography>
 				</Toolbar>
@@ -84,7 +88,7 @@ const SideMenu = ({ children }) => {
 					paper: clsx(
 						classes.drawerPaper,
 						!open && classes.drawerPaperClose
-					)
+					),
 				}}
 				open={open}
 			>

@@ -1,6 +1,6 @@
 import React from 'react';
-import withRouter from 'react-router-dom/withRouter';
-import Link from 'react-router-dom/Link';
+import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -23,6 +23,11 @@ const MainListItems = props => {
 
 		return false;
 	};
+	const iconActive = linkLocation => {
+		if (linkLocation === location.pathname) return 'primary';
+
+		return;
+	};
 	console.log(location);
 
 	return (
@@ -34,7 +39,7 @@ const MainListItems = props => {
 				to='/detail'
 			>
 				<ListItemIcon>
-					<DashboardIcon />
+					<DashboardIcon color={iconActive('/detail')} />
 				</ListItemIcon>
 				<ListItemText primary='Detail' />
 			</ListItem>
@@ -45,7 +50,7 @@ const MainListItems = props => {
 				to='/tables'
 			>
 				<ListItemIcon>
-					<ShoppingCartIcon />
+					<ShoppingCartIcon color={iconActive('/tables')} />
 				</ListItemIcon>
 				<ListItemText primary='Tables' />
 			</ListItem>
@@ -56,7 +61,7 @@ const MainListItems = props => {
 				to='/list'
 			>
 				<ListItemIcon>
-					<PeopleIcon />
+					<PeopleIcon color={iconActive('/list')} />
 				</ListItemIcon>
 				<ListItemText primary='List' />
 			</ListItem>

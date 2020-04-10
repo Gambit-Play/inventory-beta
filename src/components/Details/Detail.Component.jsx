@@ -1,4 +1,9 @@
 import React from 'react';
+import NumberFormat from 'react-number-format';
+import { connect } from 'react-redux';
+
+// Firebase Utils
+import { addCollectionAndDocument } from '../../firebase/firebase.utils';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -12,9 +17,100 @@ import SaveIcon from '@material-ui/icons/Save';
 import BlockIcon from '@material-ui/icons/Block';
 
 import useStyles from './Detail.Styles';
+import { useState } from 'react';
 
-const Detail = () => {
+const PriceFormatter = props => {
+	const { inputRef, onChange, ...other } = props;
+
+	return (
+		<NumberFormat
+			{...other}
+			getInputRef={inputRef}
+			onValueChange={values => {
+				onChange({
+					target: {
+						name: props.name,
+						value: values.value,
+					},
+				});
+			}}
+			thousandSeparator
+			isNumericString
+			prefix={`€ `}
+		/>
+	);
+};
+
+const convertToFloat = input => {
+	const formattedNumber = parseFloat(parseFloat(input).toFixed(2));
+
+	if (isNaN(formattedNumber)) {
+		return 0.0;
+	}
+
+	return formattedNumber;
+};
+
+const Detail = ({ currentUser }) => {
 	const classes = useStyles();
+	const [errors, setErrors] = useState({
+		errorPrice: '',
+		errorName: '',
+	});
+	const [menuDetails, setMenuDetails] = useState({
+		name: '',
+		price: null,
+		description: '',
+	});
+	const { name, price, description } = menuDetails;
+	const { errorPrice, errorName } = errors;
+
+	console.log(currentUser);
+
+	const handleCancel = event => {
+		event.preventDefault();
+
+		setMenuDetails({
+			name: '',
+			price: null,
+			description: '',
+		});
+		setErrors({ errorName: '', errorPrice: '' });
+	};
+
+	const handleSubmit = event => {
+		event.preventDefault();
+
+		if (menuDetails.name === '') {
+			return setErrors({ errorName: 'Name is required' });
+		}
+
+		const newProductDetails = [
+			{
+				name: menuDetails.name,
+				price: convertToFloat(menuDetails.price),
+				description: menuDetails.description,
+				createdAt: new Date().toISOString(),
+
+				// FIXME: the 'createdBy' should be the user who is logged
+				createdBy: currentUser.id,
+			},
+		];
+
+		addCollectionAndDocument('Menus', newProductDetails);
+		setMenuDetails({
+			name: '',
+			price: null,
+			description: '',
+		});
+		setErrors({ errorName: '' });
+	};
+
+	const handleChange = event => {
+		const { name, value } = event.target;
+
+		setMenuDetails({ ...menuDetails, [name]: value });
+	};
 
 	return (
 		<Grid container spacing={3}>
@@ -42,29 +138,45 @@ const Detail = () => {
 					</Box>
 					<Grid container spacing={3}>
 						<Grid item xs={6}>
-							<TextField label='Name' fullWidth color='primary' />
-						</Grid>
-						<Grid item xs={6}>
 							<TextField
-								label='Price'
+								id='name'
+								name='name'
+								label='Name'
+								value={name}
 								fullWidth
 								color='primary'
+								helperText={errorName}
+								error={errorName ? true : false}
+								onChange={handleChange}
 							/>
 						</Grid>
 						<Grid item xs={6}>
 							<TextField
-								label='Quantity'
+								id='price'
+								name='price'
+								label='Price'
+								value={price}
 								fullWidth
 								color='primary'
+								helperText={errorPrice}
+								error={errorPrice ? true : false}
+								onChange={handleChange}
+								InputProps={{
+									inputComponent: PriceFormatter,
+								}}
 							/>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
+								id='description'
+								name='description'
 								label='Description'
+								value={description}
 								fullWidth
 								color='primary'
 								multiline
 								rows='6'
+								onChange={handleChange}
 							/>
 						</Grid>
 					</Grid>
@@ -74,6 +186,8 @@ const Detail = () => {
 							color='primary'
 							size='small'
 							startIcon={<SaveIcon />}
+							type='submit'
+							onClick={handleSubmit}
 						>
 							Save
 						</Button>
@@ -82,6 +196,7 @@ const Detail = () => {
 							className={classes.cancelButton}
 							size='small'
 							startIcon={<BlockIcon />}
+							onClick={handleCancel}
 						>
 							Cancel
 						</Button>
@@ -92,4 +207,8 @@ const Detail = () => {
 	);
 };
 
-export default Detail;
+const mapStateToProps = state => ({
+	currentUser: state.user.currentUser,
+});
+
+export default connect(mapStateToProps)(Detail);
