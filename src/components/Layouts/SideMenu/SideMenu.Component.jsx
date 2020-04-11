@@ -1,6 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
 
+// Redux
+import { connect } from 'react-redux';
+import { toggleSidemenu } from '../../../redux/ui/ui.actions';
+
 import SideMenuList from './SideMenuList.Component';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -23,15 +27,11 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import useStyles from './SideMenu.Styles';
 
-const SideMenu = ({ children }) => {
+const SideMenu = ({ children, toggleSidemenu, open }) => {
 	const classes = useStyles();
-	const [open, setOpen] = React.useState(false);
 
-	const handleDrawerOpen = () => {
-		setOpen(true);
-	};
-	const handleDrawerClose = () => {
-		setOpen(false);
+	const handleToggleSidemenu = () => {
+		toggleSidemenu();
 	};
 
 	return (
@@ -46,7 +46,7 @@ const SideMenu = ({ children }) => {
 						edge='start'
 						color='inherit'
 						aria-label='open drawer'
-						onClick={handleDrawerOpen}
+						onClick={handleToggleSidemenu}
 						className={clsx(
 							classes.menuButton,
 							open && classes.menuButtonHidden
@@ -93,7 +93,7 @@ const SideMenu = ({ children }) => {
 				open={open}
 			>
 				<div className={classes.toolbarIcon}>
-					<IconButton onClick={handleDrawerClose}>
+					<IconButton onClick={handleToggleSidemenu}>
 						<ChevronLeftIcon />
 					</IconButton>
 				</div>
@@ -105,4 +105,12 @@ const SideMenu = ({ children }) => {
 	);
 };
 
-export default SideMenu;
+const mapDispatchToProps = dispatch => ({
+	toggleSidemenu: () => dispatch(toggleSidemenu()),
+});
+
+const mapStateToProps = ({ ui }) => ({
+	open: ui.sideMenu.open,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);

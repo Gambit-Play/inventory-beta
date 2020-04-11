@@ -1,6 +1,8 @@
 import React from 'react';
+import { compose } from 'redux';
 import NumberFormat from 'react-number-format';
 import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
 
 // Firebase Utils
 import { addCollectionAndDocument } from '../../firebase/firebase.utils';
@@ -51,7 +53,7 @@ const convertToFloat = input => {
 	return formattedNumber;
 };
 
-const Detail = ({ currentUser }) => {
+const Detail = ({ currentUser, history }) => {
 	const classes = useStyles();
 	const [errors, setErrors] = useState({
 		errorPrice: '',
@@ -76,6 +78,7 @@ const Detail = ({ currentUser }) => {
 			description: '',
 		});
 		setErrors({ errorName: '', errorPrice: '' });
+		history.push('/list');
 	};
 
 	const handleSubmit = event => {
@@ -104,6 +107,7 @@ const Detail = ({ currentUser }) => {
 			description: '',
 		});
 		setErrors({ errorName: '' });
+		history.push('/list');
 	};
 
 	const handleChange = event => {
@@ -186,7 +190,6 @@ const Detail = ({ currentUser }) => {
 							color='primary'
 							size='small'
 							startIcon={<SaveIcon />}
-							type='submit'
 							onClick={handleSubmit}
 						>
 							Save
@@ -211,4 +214,4 @@ const mapStateToProps = state => ({
 	currentUser: state.user.currentUser,
 });
 
-export default connect(mapStateToProps)(Detail);
+export default compose(withRouter, connect(mapStateToProps))(Detail);

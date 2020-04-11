@@ -18,7 +18,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import useStyles from './EnhancedTable.Styles';
 
-export default function EnhancedTable() {
+const EnhancedTable = () => {
 	const classes = useStyles();
 	const [order, setOrder] = React.useState('asc');
 	const [orderBy, setOrderBy] = React.useState('calories');
@@ -111,4 +111,6 @@ export default function EnhancedTable() {
 			</Fab>
 		</div>
 	);
-}
+};
+
+export default EnhancedTable;
