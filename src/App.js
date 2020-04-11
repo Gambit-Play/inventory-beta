@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.actions';
 
 // Data
-// import { MenusData } from './data/foodData';
+// import { MenusData } from './data/newData';
 
 // Firebase
 import {
@@ -39,6 +39,7 @@ class App extends React.Component {
 						id: snapshot.id,
 						...snapshot.data(),
 					});
+					console.log(snapshot.data());
 				});
 			} else {
 				setCurrentUser(userAuth);

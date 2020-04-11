@@ -1,6 +1,11 @@
 import React from 'react';
 import clsx from 'clsx';
 
+// Selectors
+import { createStructuredSelector } from 'reselect';
+import { selectSideMenuOpen } from '../../../redux/ui/ui.selectors';
+import { selectCurrentUser } from '../../../redux/user/user.selectors';
+
 // Redux
 import { connect } from 'react-redux';
 import { toggleSidemenu } from '../../../redux/ui/ui.actions';
@@ -27,7 +32,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import useStyles from './SideMenu.Styles';
 
-const SideMenu = ({ children, toggleSidemenu, open }) => {
+const SideMenu = ({ children, toggleSidemenu, open, currentUser }) => {
 	const classes = useStyles();
 
 	const handleToggleSidemenu = () => {
@@ -79,7 +84,9 @@ const SideMenu = ({ children, toggleSidemenu, open }) => {
 						className={classes.avatar}
 						onClick={signInWithGoogle}
 					/>
-					<Typography>Amanda Nunez</Typography>
+					<Typography>
+						{currentUser && currentUser.displayName}
+					</Typography>
 				</Toolbar>
 			</AppBar>
 			<Drawer
@@ -109,8 +116,9 @@ const mapDispatchToProps = dispatch => ({
 	toggleSidemenu: () => dispatch(toggleSidemenu()),
 });
 
-const mapStateToProps = ({ ui }) => ({
-	open: ui.sideMenu.open,
+const mapStateToProps = createStructuredSelector({
+	open: selectSideMenuOpen,
+	currentUser: selectCurrentUser,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);

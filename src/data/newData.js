@@ -33,4 +33,17 @@ export const MenusData = [
 	},
 ];
 
+export const UsersData = [
+	{
+		displayName: 'John Doe',
+		email: 'john@email.com',
+		createdAt: '2020-04-08T23:02:54.402Z',
+		firstName: 'John',
+		lastName: 'Doe',
+		avatar: '',
+		company: '',
+		role: '',
+	},
+];
+
 export const ItemsData = [];

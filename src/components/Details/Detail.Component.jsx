@@ -2,7 +2,11 @@ import React from 'react';
 import { compose } from 'redux';
 import NumberFormat from 'react-number-format';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+
+// Selectors
+import { createStructuredSelector } from 'reselect';
+import { selectCurrentUser } from '../../redux/user/user.selectors';
 
 // Routes
 import * as ROUTES from '../../routes/routes';
@@ -97,8 +101,6 @@ const Detail = ({ currentUser, history }) => {
 				price: convertToFloat(menuDetails.price),
 				description: menuDetails.description,
 				createdAt: new Date().toISOString(),
-
-				// FIXME: the 'createdBy' should be the user who is logged
 				createdBy: currentUser.id,
 			},
 		];
@@ -213,8 +215,8 @@ const Detail = ({ currentUser, history }) => {
 	);
 };
 
-const mapStateToProps = state => ({
-	currentUser: state.user.currentUser,
+const mapStateToProps = createStructuredSelector({
+	currentUser: selectCurrentUser,
 });
 
 export default compose(withRouter, connect(mapStateToProps))(Detail);
