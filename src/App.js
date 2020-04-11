@@ -1,6 +1,9 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
+// Routes
+import * as ROUTES from './routes/routes';
+
 // Redux
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.actions';
@@ -55,9 +58,15 @@ class App extends React.Component {
 				<React.Fragment>
 					<MainContainer>
 						<SideMenu>
-							<Route path='/list' component={EnhancedTable} />
-							<Route path='/detail' component={Detail} />
-							<Route path='/tables' component={SelectTable} />
+							<Route
+								path={ROUTES.LIST}
+								component={EnhancedTable}
+							/>
+							<Route path={ROUTES.DETAIL} component={Detail} />
+							<Route
+								path={ROUTES.TABLE}
+								component={SelectTable}
+							/>
 						</SideMenu>
 					</MainContainer>
 				</React.Fragment>

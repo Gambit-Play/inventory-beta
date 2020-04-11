@@ -4,6 +4,9 @@ import NumberFormat from 'react-number-format';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
+// Routes
+import * as ROUTES from '../../routes/routes';
+
 // Firebase Utils
 import { addCollectionAndDocument } from '../../firebase/firebase.utils';
 
@@ -78,7 +81,7 @@ const Detail = ({ currentUser, history }) => {
 			description: '',
 		});
 		setErrors({ errorName: '', errorPrice: '' });
-		history.push('/list');
+		history.push(ROUTES.LIST);
 	};
 
 	const handleSubmit = event => {
@@ -107,7 +110,7 @@ const Detail = ({ currentUser, history }) => {
 			description: '',
 		});
 		setErrors({ errorName: '' });
-		history.push('/list');
+		history.push(ROUTES.LIST);
 	};
 
 	const handleChange = event => {

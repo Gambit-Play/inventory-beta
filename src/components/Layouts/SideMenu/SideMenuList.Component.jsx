@@ -2,6 +2,9 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
+// Routes
+import * as ROUTES from '../../../routes/routes';
+
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -33,35 +36,35 @@ const MainListItems = props => {
 	return (
 		<div>
 			<ListItem
-				selected={isCurrent('/detail') ? true : false}
+				selected={isCurrent(ROUTES.DETAIL) ? true : false}
 				button
 				component={Link}
-				to='/detail'
+				to={ROUTES.DETAIL}
 			>
 				<ListItemIcon>
-					<DashboardIcon color={iconActive('/detail')} />
+					<DashboardIcon color={iconActive(ROUTES.DETAIL)} />
 				</ListItemIcon>
 				<ListItemText primary='Detail' />
 			</ListItem>
 			<ListItem
-				selected={isCurrent('/tables') ? true : false}
+				selected={isCurrent(ROUTES.TABLE) ? true : false}
 				button
 				component={Link}
-				to='/tables'
+				to={ROUTES.TABLE}
 			>
 				<ListItemIcon>
-					<ShoppingCartIcon color={iconActive('/tables')} />
+					<ShoppingCartIcon color={iconActive(ROUTES.TABLE)} />
 				</ListItemIcon>
 				<ListItemText primary='Tables' />
 			</ListItem>
 			<ListItem
-				selected={isCurrent('/list') ? true : false}
+				selected={isCurrent(ROUTES.LIST) ? true : false}
 				button
 				component={Link}
-				to='/list'
+				to={ROUTES.LIST}
 			>
 				<ListItemIcon>
-					<PeopleIcon color={iconActive('/list')} />
+					<PeopleIcon color={iconActive(ROUTES.LIST)} />
 				</ListItemIcon>
 				<ListItemText primary='List' />
 			</ListItem>
