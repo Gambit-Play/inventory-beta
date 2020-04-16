@@ -1,9 +1,21 @@
 import { combineReducers } from 'redux';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import userReducer from './user/user.reducer';
 import uiReducer from './ui/ui.reducer';
+import menusReducer from './menus/menus.reducer';
 
-export default combineReducers({
+const persistConfig = {
+	key: 'root',
+	storage,
+	whitelist: ['ui', 'menus'],
+};
+
+const rootReducer = combineReducers({
 	user: userReducer,
 	ui: uiReducer,
+	menus: menusReducer,
 });
+
+export default persistReducer(persistConfig, rootReducer);

@@ -13,6 +13,7 @@ const INITIAL_STATE = {
 
 const uiReducer = (state = INITIAL_STATE, action) => {
 	const { open } = state.sideMenu;
+	// const { user, items, menus } = state.loading;
 
 	switch (action.type) {
 		case UiActionTypes.TOGGLE_SIDEMENU:

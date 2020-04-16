@@ -4,9 +4,13 @@ import NumberFormat from 'react-number-format';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
+// Utils
+import { convertToFloat } from '../../utils/global-utils';
+
 // Selectors
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
+import { selectCurrentMenus } from '../../redux/menus/menus.selectors';
 
 // Routes
 import * as ROUTES from '../../routes/routes';
@@ -50,17 +54,7 @@ const PriceFormatter = props => {
 	);
 };
 
-const convertToFloat = input => {
-	const formattedNumber = parseFloat(parseFloat(input).toFixed(2));
-
-	if (isNaN(formattedNumber)) {
-		return 0.0;
-	}
-
-	return formattedNumber;
-};
-
-const Detail = ({ currentUser, history }) => {
+const Detail = ({ currentUser, history, menus }) => {
 	const classes = useStyles();
 	const [errors, setErrors] = useState({
 		errorPrice: '',
@@ -74,8 +68,6 @@ const Detail = ({ currentUser, history }) => {
 	const { name, price, description } = menuDetails;
 	const { errorPrice, errorName } = errors;
 
-	console.log(currentUser);
-
 	const handleCancel = event => {
 		event.preventDefault();
 
@@ -85,7 +77,10 @@ const Detail = ({ currentUser, history }) => {
 			description: '',
 		});
 		setErrors({ errorName: '', errorPrice: '' });
-		history.push(ROUTES.LIST);
+
+		//TODO: Code below is a test
+		// history.push(ROUTES.LIST);
+		history.goBack();
 	};
 
 	const handleSubmit = event => {
@@ -217,6 +212,7 @@ const Detail = ({ currentUser, history }) => {
 
 const mapStateToProps = createStructuredSelector({
 	currentUser: selectCurrentUser,
+	menus: selectCurrentMenus,
 });
 
 export default compose(withRouter, connect(mapStateToProps))(Detail);

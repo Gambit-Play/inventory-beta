@@ -44,8 +44,6 @@ export const createUserProfileDocument = async (userAuth, otherData) => {
 	const userRef = firestore.doc(`Users/${userAuth.uid}`);
 	const snapshot = await userRef.get();
 
-	console.log(snapshot);
-
 	if (!snapshot.exists) {
 		const { displayName, email } = userAuth;
 		const createdAt = new Date().toISOString();
@@ -65,26 +63,68 @@ export const createUserProfileDocument = async (userAuth, otherData) => {
 	return userRef;
 };
 
-export const addCollectionAndDocument = async (collectionId, objectToAdd) => {
+export const addCollectionAndDocument = async (collectionId, documents) => {
 	const collectionRef = firestore.collection(collectionId);
 	const batch = firestore.batch();
 
-	objectToAdd.forEach(obj => {
-		const newDocRef = collectionRef.doc();
+	documents.forEach(doc => {
+		const newDocumentRef = collectionRef.doc();
 
-		batch.set(newDocRef, obj);
+		batch.set(newDocumentRef, { id: newDocumentRef.id, ...doc });
 	});
 
 	return await batch.commit();
 };
 
+export const removeDocument = async (collectionId, documentId) => {
+	if (!collectionId || !documentId)
+		console.error('Please provide all the inputs');
+
+	const collectionRef = firestore.collection(collectionId).doc(documentId);
+	await collectionRef.delete();
+};
+
+export const getDocument = async (collectionId, documentId) => {
+	if (!collectionId || !documentId)
+		console.error('Please provide all the inputs');
+
+	const documentRef = firestore.doc(`${collectionId}/${documentId}`);
+	const snapshot = await documentRef.get();
+	const data = snapshot.data();
+
+	return data;
+};
+
+export const getCollection = async collectionId => {
+	if (!collectionId) console.error('There is no "collectionId"');
+
+	const collectionRef = firestore.collection(collectionId);
+	// const snapshot = await collectionRef.get();
+	// const data = snapshot.docs.map(doc => {
+	// 	return {id: doc.id, ...doc.data()}
+	// })
+	//  collectionRef.onSnapshot((snapshot) => console.log(snapshot))
+
+	return collectionRef;
+};
+
+/* ================================================================ */
+/*  Firestor & Auth	                                                */
+/* ================================================================ */
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
+
+/* ================================================================ */
+/*  Firebase Auth Providers                                         */
+/* ================================================================ */
 
 const provider = new firebase.auth.GoogleAuthProvider();
 // provider.setCustomParameters({ prompt: 'select_account' });
 // provider.addScope('profile');
 // provider.addScope('email');
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
+
+/* ================================================================ */
 
 export default firebase;
