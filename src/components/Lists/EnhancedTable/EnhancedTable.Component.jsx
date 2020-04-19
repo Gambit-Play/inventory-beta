@@ -1,4 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+// Redux
+import { connect } from 'react-redux';
+import {
+	fetchCollectionsSuccess,
+	fetchCollectionsStart,
+	fetchCollectionsFailure,
+	removeCollectionListener,
+} from '../../../redux/menus/menus.actions';
 
 import { rows, headCells } from '../../../data/Data';
 
@@ -18,7 +27,8 @@ import AddIcon from '@material-ui/icons/Add';
 
 import useStyles from './EnhancedTable.Styles';
 
-const EnhancedTable = () => {
+const EnhancedTable = props => {
+	const { fetchCollectionsStart, removeCollectionListener } = props;
 	const classes = useStyles();
 	const [order, setOrder] = React.useState('asc');
 	const [orderBy, setOrderBy] = React.useState('calories');
@@ -26,6 +36,14 @@ const EnhancedTable = () => {
 	const [page, setPage] = React.useState(0);
 	const [dense, setDense] = React.useState(false);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+	useEffect(() => {
+		fetchCollectionsStart('Menus');
+
+		return () => {
+			removeCollectionListener();
+		};
+	}, [fetchCollectionsStart, removeCollectionListener]);
 
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === 'asc';
@@ -113,4 +131,12 @@ const EnhancedTable = () => {
 	);
 };
 
-export default EnhancedTable;
+const mapDispatchToProps = dispatch => ({
+	fetchCollectionsSuccess: menus => dispatch(fetchCollectionsSuccess(menus)),
+	fetchCollectionsStart: collectionId =>
+		dispatch(fetchCollectionsStart(collectionId)),
+	fetchCollectionsFailure: error => dispatch(fetchCollectionsFailure(error)),
+	removeCollectionListener: () => dispatch(removeCollectionListener()),
+});
+
+export default connect(null, mapDispatchToProps)(EnhancedTable);

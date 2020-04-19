@@ -1,29 +1,23 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-// Utils
-import { convertArrayToObject } from './utils/global-utils';
-
 // Routes
 import * as ROUTES from './routes/routes';
 
 // Redux
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.actions';
-import { setMenus } from './redux/menus/menus.actions';
+import {
+	fetchCollectionsSuccess,
+	fetchCollectionsStart,
+	fetchCollectionsFailure,
+} from './redux/menus/menus.actions';
 
 // Data
 // import { MenusData } from './data/newData';
 
 // Firebase
-import {
-	auth,
-	createUserProfileDocument,
-	getCollection,
-	getDocument,
-	// removeDocument,
-	// addCollectionAndDocument,
-} from './firebase/firebase.utils';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 // Components
 import SideMenu from './components/Layouts/SideMenu/SideMenu.Component';
@@ -34,10 +28,10 @@ import MainContainer from './components/StyledComponents/MainContainer/MainConta
 
 class App extends React.Component {
 	unsubscribeFromAuth = null;
-	unsubscribeFromMenus = null;
 
 	componentDidMount() {
-		const { setCurrentUser, setMenus } = this.props;
+		const { setCurrentUser } = this.props;
+
 		this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
 			if (userAuth) {
 				const otherData = {
@@ -63,44 +57,12 @@ class App extends React.Component {
 			}
 		});
 
-		(async function () {
-			try {
-				const docData = await getDocument(
-					'Menus',
-					'dk1UtNcqFzXY3niclrQw'
-				);
-				console.log(docData);
-			} catch (error) {
-				console.log(error);
-			}
-		})();
-
-		// const getDoc = async () => {
-		// 	const docData = await getDocument('Menus', '9xZv0jxTTOjH5OxVlMH4');
-		// 	console.log(docData);
-		// };
-
-		// getDoc();
-
-		const setNewMenus = async () => {
-			const collectionRef = await getCollection('Menus');
-			this.unsubscribeFromMenus = collectionRef.onSnapshot(snapshot => {
-				const data = snapshot.docs.map(doc => doc.data());
-
-				const menus = convertArrayToObject(data, 'id');
-				setMenus(menus);
-				console.log(menus);
-			});
-		};
-
-		setNewMenus();
 		// Unquote the code below, if you want to create a new "Menus" collection in firebase.
 		// addCollectionAndDocument('Menus', MenusData);
 	}
 
 	componentWillUnmount() {
 		this.unsubscribeFromAuth();
-		this.unsubscribeFromMenus();
 	}
 
 	render() {
@@ -128,7 +90,9 @@ class App extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
 	setCurrentUser: user => dispatch(setCurrentUser(user)),
-	setMenus: menus => dispatch(setMenus(menus)),
+	fetchCollectionsSuccess: menus => dispatch(fetchCollectionsSuccess(menus)),
+	fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
+	fetchCollectionsFailure: error => dispatch(fetchCollectionsFailure(error)),
 });
 
 export default connect(null, mapDispatchToProps)(App);
