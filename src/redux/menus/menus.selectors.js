@@ -7,3 +7,9 @@ export const selectCurrentMenus = createSelector(
 	[selectMenus],
 	menus => menus.currentMenus
 );
+
+// Selects user.isFetching from the state
+export const selectIsFetching = createSelector(
+	[selectMenus],
+	menus => menus.isFetching
+);

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import orderData from 'lodash/orderBy';
 
 // Redux
 import { connect } from 'react-redux';
@@ -9,7 +10,14 @@ import {
 	removeCollectionListener,
 } from '../../../redux/menus/menus.actions';
 
-import { rows, headCells } from '../../../data/Data';
+// Selectors
+import { createStructuredSelector } from 'reselect';
+import {
+	selectCurrentMenus,
+	selectIsFetching,
+} from '../../../redux/menus/menus.selectors';
+
+import { headCells } from '../../../data/Data';
 
 import EnhancedTableHead from './EnhancedTableHead.Component';
 import EnhancedTableToolbar from './EnhancedTableToolbar.Component';
@@ -28,15 +36,27 @@ import AddIcon from '@material-ui/icons/Add';
 import useStyles from './EnhancedTable.Styles';
 
 const EnhancedTable = props => {
-	const { fetchCollectionsStart, removeCollectionListener } = props;
+	const {
+		fetchCollectionsStart,
+		removeCollectionListener,
+		menus,
+		isFetching,
+	} = props;
 	const classes = useStyles();
 	const [order, setOrder] = React.useState('asc');
-	const [orderBy, setOrderBy] = React.useState('calories');
+	const [orderBy, setOrderBy] = React.useState('name');
 	const [selected, setSelected] = React.useState([]);
 	const [page, setPage] = React.useState(0);
 	const [dense, setDense] = React.useState(false);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+	// This code is used to determin which column to sort.
+	// It checks first to see if it´s a number.
+	// Set to lowercase to make it case insensitive.
+	const sorter =
+		orderBy === 'price' ? orderBy : menu => menu[orderBy].toLowerCase();
+
+	const rows = orderData(menus, [sorter], order);
 	useEffect(() => {
 		fetchCollectionsStart('Menus');
 
@@ -139,4 +159,9 @@ const mapDispatchToProps = dispatch => ({
 	removeCollectionListener: () => dispatch(removeCollectionListener()),
 });
 
-export default connect(null, mapDispatchToProps)(EnhancedTable);
+const mapStateToProps = createStructuredSelector({
+	menus: selectCurrentMenus,
+	isFetching: selectIsFetching,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EnhancedTable);

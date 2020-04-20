@@ -108,6 +108,31 @@ export const getCollection = async collectionId => {
 	return collectionRef;
 };
 
+export const getUsersCollection = async () => {
+	const usersRef = await getCollection('Users');
+	const snapshot = await usersRef.get();
+	const data = snapshot.docs.map(doc => {
+		return { id: doc.id, ...doc.data() };
+	});
+
+	return data;
+};
+
+export const getUserFromCollection = (userCollection, doc) => {
+	const idUser = user => {
+		return user.id === doc.createdBy;
+	};
+	const user = userCollection.find(idUser);
+	const updatedDoc = {
+		...doc,
+		createdBy: user.displayName,
+	};
+
+	// console.log('@@ getUserFromCollection :: user', updatedDoc);
+
+	return updatedDoc;
+};
+
 /* ================================================================ */
 /*  Firestor & Auth	                                                */
 /* ================================================================ */

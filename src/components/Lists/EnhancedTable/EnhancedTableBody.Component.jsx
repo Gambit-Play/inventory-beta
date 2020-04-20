@@ -1,24 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { stableSort, getComparator } from './EnhancedTable.Actions';
-
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
 export default function EnhancedTableBody(props) {
-	const {
-		order,
-		orderBy,
-		page,
-		dense,
-		rowsPerPage,
-		rows,
-		selected,
-		setSelected
-	} = props;
+	const { page, dense, rowsPerPage, rows, selected, setSelected } = props;
 
 	const handleClick = (event, name) => {
 		const selectedIndex = selected.indexOf(name);
@@ -46,7 +35,7 @@ export default function EnhancedTableBody(props) {
 		rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 	return (
 		<TableBody>
-			{stableSort(rows, getComparator(order, orderBy))
+			{rows
 				.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 				.map((row, index) => {
 					const isItemSelected = isSelected(row.name);
@@ -66,7 +55,7 @@ export default function EnhancedTableBody(props) {
 								<Checkbox
 									checked={isItemSelected}
 									inputProps={{
-										'aria-labelledby': labelId
+										'aria-labelledby': labelId,
 									}}
 								/>
 							</TableCell>
@@ -78,17 +67,17 @@ export default function EnhancedTableBody(props) {
 							>
 								{row.name}
 							</TableCell>
-							<TableCell align='right'>{row.calories}</TableCell>
-							<TableCell align='right'>{row.fat}</TableCell>
-							<TableCell align='right'>{row.carbs}</TableCell>
-							<TableCell align='right'>{row.protein}</TableCell>
+							<TableCell>{row.description}</TableCell>
+							<TableCell align='right'>€ {row.price}</TableCell>
+							<TableCell align='right'>{row.createdBy}</TableCell>
+							<TableCell align='right'>{row.createdAt}</TableCell>
 						</TableRow>
 					);
 				})}
 			{emptyRows > 0 && (
 				<TableRow
 					style={{
-						height: (dense ? 33 : 53) * emptyRows
+						height: (dense ? 33 : 53) * emptyRows,
 					}}
 				>
 					<TableCell colSpan={6} />
@@ -106,5 +95,5 @@ EnhancedTableBody.propTypes = {
 	rowsPerPage: PropTypes.number.isRequired,
 	rows: PropTypes.array.isRequired,
 	selected: PropTypes.array.isRequired,
-	setSelected: PropTypes.func.isRequired
+	setSelected: PropTypes.func.isRequired,
 };
