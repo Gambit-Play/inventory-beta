@@ -7,3 +7,9 @@ export const selectCurrentUser = createSelector(
 	[selectUser],
 	user => user.currentUser
 );
+
+// Selects user.allUsers from the state
+export const selectAllUsers = createSelector(
+	[selectUser],
+	user => user.allUsers
+);

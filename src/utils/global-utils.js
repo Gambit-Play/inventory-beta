@@ -20,3 +20,17 @@ export const convertToFloat = input => {
 
 	return formattedNumber;
 };
+
+// Changes the property 'createdBy' from user id to displayName
+export const updateDataWithUsersName = (userCollection, doc) => {
+	const idUser = user => {
+		return user.id === doc.createdBy;
+	};
+	const user = userCollection.find(idUser);
+	const updatedDoc = {
+		...doc,
+		createdBy: user.displayName,
+	};
+
+	return updatedDoc;
+};

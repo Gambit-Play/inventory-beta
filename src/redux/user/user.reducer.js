@@ -2,16 +2,42 @@ import UserActionTypes from './user.types';
 
 const INITIAL_STATE = {
 	currentUser: null,
+	allUsers: null,
+	isFetching: false,
+	errorMessageCurrentUser: undefined,
+	errorMessageAllUsers: undefined,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case UserActionTypes.SET_CURRENT_USER:
+		/* ================================================================ */
+		/*  Current User Reducers                                           */
+		/* ================================================================ */
+		case UserActionTypes.FETCH_USER_SUCCESS:
 			return {
 				...state,
 				currentUser: action.payload,
 			};
-
+		/* ================================================================ */
+		/*  All Users Reducers	                                            */
+		/* ================================================================ */
+		case UserActionTypes.FETCH_ALL_USERS_START:
+			return {
+				...state,
+				isFetching: true,
+			};
+		case UserActionTypes.FETCH_ALL_USERS_SUCCESS:
+			return {
+				...state,
+				isFetching: false,
+				allUsers: action.payload,
+			};
+		case UserActionTypes.FETCH_ALL_USERS_FAILURE:
+			return {
+				...state,
+				isFetching: false,
+				errorMessageAllUsers: action.payload,
+			};
 		default:
 			return state;
 	}

@@ -11,11 +11,7 @@ import {
 } from './menus.actions';
 
 // Firebase utils
-import {
-	getCollection,
-	getUserFromCollection,
-	getUsersCollection,
-} from '../../firebase/firebase.utils';
+import { getCollection } from '../../firebase/firebase.utils';
 
 // Redux
 import { sagaMiddleware } from '../store';
@@ -26,29 +22,17 @@ import { sagaMiddleware } from '../store';
 let unsubscribe;
 export function* fetchCollectionAsync({ payload: collectionId }) {
 	try {
-		console.log(collectionId);
-		const usersCollection = yield getUsersCollection(); //<-----| FIXME: Make a user.sagas.js to save the data in redux state
 		const collectionRef = yield getCollection(collectionId);
 		unsubscribe = yield collectionRef.onSnapshot(snapshot => {
 			// This 'sagaMiddleware' makes it possible to run sagas within a callback
-			// Calls the update function generator when the 'onSnapshot' fires
+			// Calls the 'fetchCollectionsUpdate' function generator when the 'onSnapshot' fires
 			if (collectionId === 'Menus') sagaMiddleware.run(fetchCurrentMenus);
 
-			const docsArray = snapshot.docs.map(doc => {
-				const menuDoc = doc.data();
-				const updatedMenuDoc = getUserFromCollection(
-					usersCollection,
-					menuDoc
-				);
-
-				return updatedMenuDoc;
-			});
-
-			console.log('@@ fetchCollectionAsync :: docsArray', docsArray);
+			const data = snapshot.docs.map(doc => doc.data());
 
 			// Calls the success function generator depending on the 'collectionId'
 			if (collectionId === 'Menus')
-				sagaMiddleware.run(fetchCurrentMenus, docsArray);
+				sagaMiddleware.run(fetchCurrentMenus, data);
 		});
 	} catch (error) {
 		yield put(fetchCollectionsFailure(error.message));

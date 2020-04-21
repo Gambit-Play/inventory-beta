@@ -118,21 +118,6 @@ export const getUsersCollection = async () => {
 	return data;
 };
 
-export const getUserFromCollection = (userCollection, doc) => {
-	const idUser = user => {
-		return user.id === doc.createdBy;
-	};
-	const user = userCollection.find(idUser);
-	const updatedDoc = {
-		...doc,
-		createdBy: user.displayName,
-	};
-
-	// console.log('@@ getUserFromCollection :: user', updatedDoc);
-
-	return updatedDoc;
-};
-
 /* ================================================================ */
 /*  Firestor & Auth	                                                */
 /* ================================================================ */

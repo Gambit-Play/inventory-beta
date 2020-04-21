@@ -9,7 +9,7 @@ import menusReducer from './menus/menus.reducer';
 const persistConfig = {
 	key: 'root',
 	storage,
-	whitelist: ['ui', 'menus'],
+	whitelist: ['ui', 'menus', 'user'],
 };
 
 const rootReducer = combineReducers({

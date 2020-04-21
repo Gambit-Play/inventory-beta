@@ -6,12 +6,13 @@ import * as ROUTES from './routes/routes';
 
 // Redux
 import { connect } from 'react-redux';
-import { setCurrentUser } from './redux/user/user.actions';
+import { fetchCurrentUserSuccess } from './redux/user/user.actions';
 import {
 	fetchCollectionsSuccess,
 	fetchCollectionsStart,
 	fetchCollectionsFailure,
 } from './redux/menus/menus.actions';
+import { fetchAllUsersStart } from './redux/user/user.actions';
 
 // Data
 // import { MenusData } from './data/newData';
@@ -30,7 +31,7 @@ class App extends React.Component {
 	unsubscribeFromAuth = null;
 
 	componentDidMount() {
-		const { setCurrentUser } = this.props;
+		const { fetchCurrentUserSuccess, fetchAllUsersStart } = this.props;
 
 		this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
 			if (userAuth) {
@@ -47,15 +48,17 @@ class App extends React.Component {
 				);
 
 				userRef.onSnapshot(snapshot => {
-					setCurrentUser({
+					fetchCurrentUserSuccess({
 						id: snapshot.id,
 						...snapshot.data(),
 					});
 				});
 			} else {
-				setCurrentUser(userAuth);
+				fetchCurrentUserSuccess(userAuth);
 			}
 		});
+
+		fetchAllUsersStart();
 
 		// Unquote the code below, if you want to create a new "Menus" collection in firebase.
 		// addCollectionAndDocument('Menus', MenusData);
@@ -89,10 +92,11 @@ class App extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-	setCurrentUser: user => dispatch(setCurrentUser(user)),
+	fetchCurrentUserSuccess: user => dispatch(fetchCurrentUserSuccess(user)),
 	fetchCollectionsSuccess: menus => dispatch(fetchCollectionsSuccess(menus)),
 	fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
 	fetchCollectionsFailure: error => dispatch(fetchCollectionsFailure(error)),
+	fetchAllUsersStart: () => dispatch(fetchAllUsersStart()),
 });
 
 export default connect(null, mapDispatchToProps)(App);

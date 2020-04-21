@@ -16,6 +16,10 @@ import {
 	selectCurrentMenus,
 	selectIsFetching,
 } from '../../../redux/menus/menus.selectors';
+import { selectAllUsers } from '../../../redux/user/user.selectors';
+
+// Firebase Utils
+import { updateDataWithUsersName } from '../../../utils/global-utils';
 
 import { headCells } from '../../../data/Data';
 
@@ -41,6 +45,7 @@ const EnhancedTable = props => {
 		removeCollectionListener,
 		menus,
 		isFetching,
+		allUsers,
 	} = props;
 	const classes = useStyles();
 	const [order, setOrder] = React.useState('asc');
@@ -49,14 +54,6 @@ const EnhancedTable = props => {
 	const [page, setPage] = React.useState(0);
 	const [dense, setDense] = React.useState(false);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-	// This code is used to determin which column to sort.
-	// It checks first to see if it´s a number.
-	// Set to lowercase to make it case insensitive.
-	const sorter =
-		orderBy === 'price' ? orderBy : menu => menu[orderBy].toLowerCase();
-
-	const rows = orderData(menus, [sorter], order);
 	useEffect(() => {
 		fetchCollectionsStart('Menus');
 
@@ -64,6 +61,22 @@ const EnhancedTable = props => {
 			removeCollectionListener();
 		};
 	}, [fetchCollectionsStart, removeCollectionListener]);
+
+	// This code is used to determin which column to sort.
+	// It checks first to see if it´s a number.
+	// Set to lowercase to make it case insensitive.
+	const sorter =
+		orderBy === 'price'
+			? orderBy
+			: menu => {
+					return menu[orderBy].toLowerCase();
+			  };
+
+	const updatedMenus = menus.map(menu =>
+		updateDataWithUsersName(allUsers, menu)
+	);
+
+	const rows = orderData(updatedMenus, [sorter], order);
 
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === 'asc';
@@ -162,6 +175,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = createStructuredSelector({
 	menus: selectCurrentMenus,
 	isFetching: selectIsFetching,
+	allUsers: selectAllUsers,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnhancedTable);

@@ -4,14 +4,10 @@ import { takeLatest, put, all, call } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
 
 // Actions
-import { setCurrentUser } from './user.actions';
+import { fetchAllUsersFailure, fetchAllUsersSuccess } from './user.actions';
 
 // Firebase utils
-import {
-	auth,
-	googleProvider,
-	createUserProfileDocument,
-} from '../../firebase/firebase.utils';
+import { getUsersCollection } from '../../firebase/firebase.utils';
 
 /* ================================================================ */
 /*  Reusable Function Generators                                    */
@@ -21,14 +17,34 @@ import {
 /*  Actions                                                         */
 /* ================================================================ */
 
+export function* fetchAllUsersCollectioAsync() {
+	try {
+		const usersCollection = yield getUsersCollection();
+		console.log(
+			'@@ fetchAllUsersCollectioAsync - usersCollection',
+			usersCollection
+		);
+		yield put(fetchAllUsersSuccess(usersCollection));
+	} catch (error) {
+		yield put(fetchAllUsersFailure(error.message));
+	}
+}
+
 /* ================================================================ */
 /*  Listeners                                                       */
 /* ================================================================ */
+
+export function* fetchCollectionStart() {
+	yield takeLatest(
+		UserActionTypes.FETCH_ALL_USERS_START,
+		fetchAllUsersCollectioAsync
+	);
+}
 
 /* ================================================================ */
 /*  Root Saga                                                       */
 /* ================================================================ */
 
-export function* userSagas() {
-	yield all([call()]);
+export default function* userSagas() {
+	yield all([call(fetchCollectionStart)]);
 }
