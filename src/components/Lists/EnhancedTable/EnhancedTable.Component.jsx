@@ -34,6 +34,7 @@ import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Fab from '@material-ui/core/Fab';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import AddIcon from '@material-ui/icons/Add';
 
@@ -106,41 +107,47 @@ const EnhancedTable = props => {
 		setDense(event.target.checked);
 	};
 
-	console.log(rows);
-
 	return (
 		<div className={classes.root}>
 			<Paper className={classes.paper}>
 				<EnhancedTableToolbar numSelected={selected.length} />
-				<TableContainer>
-					<Table
-						className={classes.table}
-						aria-labelledby='tableTitle'
-						size={dense ? 'small' : 'medium'}
-						aria-label='enhanced table'
-					>
-						<EnhancedTableHead
-							classes={classes}
-							numSelected={selected.length}
-							order={order}
-							orderBy={orderBy}
-							onSelectAllClick={handleSelectAllClick}
-							onRequestSort={handleRequestSort}
-							rowCount={rows.length}
-							headCells={headCells}
-						/>
-						<EnhancedTableBody
-							order={order}
-							orderBy={orderBy}
-							page={page}
-							dense={dense}
-							rowsPerPage={rowsPerPage}
-							rows={rows}
-							selected={selected}
-							setSelected={setSelected}
-						/>
-					</Table>
-				</TableContainer>
+
+				{isFetching ? (
+					<div className={classes.loaderContainer}>
+						<CircularProgress />
+					</div>
+				) : (
+					<TableContainer>
+						<Table
+							className={classes.table}
+							aria-labelledby='tableTitle'
+							size={dense ? 'small' : 'medium'}
+							aria-label='enhanced table'
+						>
+							<EnhancedTableHead
+								classes={classes}
+								numSelected={selected.length}
+								order={order}
+								orderBy={orderBy}
+								onSelectAllClick={handleSelectAllClick}
+								onRequestSort={handleRequestSort}
+								rowCount={rows.length}
+								headCells={headCells}
+							/>
+							<EnhancedTableBody
+								order={order}
+								orderBy={orderBy}
+								page={page}
+								dense={dense}
+								rowsPerPage={rowsPerPage}
+								rows={rows}
+								selected={selected}
+								setSelected={setSelected}
+							/>
+						</Table>
+					</TableContainer>
+				)}
+
 				<TablePagination
 					rowsPerPageOptions={[5, 10, 25]}
 					component='div'

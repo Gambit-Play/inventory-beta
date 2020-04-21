@@ -10,7 +10,7 @@ import { convertToFloat } from '../../utils/global-utils';
 // Selectors
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
-import { selectCurrentMenus } from '../../redux/menus/menus.selectors';
+import { selectSingleMenu } from '../../redux/menus/menus.selectors';
 
 // Routes
 import * as ROUTES from '../../routes/routes';
@@ -54,16 +54,16 @@ const PriceFormatter = props => {
 	);
 };
 
-const Detail = ({ currentUser, history, menus }) => {
+const Detail = ({ currentUser, history, menu }) => {
 	const classes = useStyles();
 	const [errors, setErrors] = useState({
 		errorPrice: '',
 		errorName: '',
 	});
 	const [menuDetails, setMenuDetails] = useState({
-		name: '',
-		price: null,
-		description: '',
+		name: menu === undefined ? '' : menu.name,
+		price: menu === undefined ? null : menu.price,
+		description: menu === undefined ? '' : menu.description,
 	});
 	const { name, price, description } = menuDetails;
 	const { errorPrice, errorName } = errors;
@@ -185,15 +185,28 @@ const Detail = ({ currentUser, history, menus }) => {
 						</Grid>
 					</Grid>
 					<Box display='flex' paddingTop={5}>
-						<Button
-							variant='contained'
-							color='primary'
-							size='small'
-							startIcon={<SaveIcon />}
-							onClick={handleSubmit}
-						>
-							Save
-						</Button>
+						{menu === undefined ? (
+							<Button
+								variant='contained'
+								color='primary'
+								size='small'
+								startIcon={<SaveIcon />}
+								onClick={handleSubmit}
+							>
+								Save
+							</Button>
+						) : (
+							<Button
+								variant='contained'
+								color='primary'
+								size='small'
+								startIcon={<SaveIcon />}
+								onClick={handleCancel}
+							>
+								Update
+							</Button>
+						)}
+
 						<Button
 							variant='contained'
 							className={classes.cancelButton}
@@ -210,9 +223,10 @@ const Detail = ({ currentUser, history, menus }) => {
 	);
 };
 
-const mapStateToProps = createStructuredSelector({
-	currentUser: selectCurrentUser,
-	menus: selectCurrentMenus,
-});
+const mapStateToProps = (state, ownProps) =>
+	createStructuredSelector({
+		currentUser: selectCurrentUser,
+		menu: selectSingleMenu(ownProps.match.params.menuId),
+	});
 
 export default compose(withRouter, connect(mapStateToProps))(Detail);

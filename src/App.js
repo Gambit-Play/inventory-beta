@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { fetchCurrentUserSuccess } from './redux/user/user.actions';
 import {
 	fetchCollectionsSuccess,
-	fetchCollectionsStart,
 	fetchCollectionsFailure,
 } from './redux/menus/menus.actions';
 import { fetchAllUsersStart } from './redux/user/user.actions';
@@ -78,7 +77,15 @@ class App extends React.Component {
 								path={ROUTES.LIST}
 								component={EnhancedTable}
 							/>
-							<Route path={ROUTES.DETAIL} component={Detail} />
+							<Route
+								path={`${ROUTES.DETAIL}/:menuId`}
+								component={Detail}
+							/>
+							<Route
+								exact
+								path={ROUTES.DETAIL}
+								component={Detail}
+							/>
 							<Route
 								path={ROUTES.TABLE}
 								component={SelectTable}
@@ -94,7 +101,6 @@ class App extends React.Component {
 const mapDispatchToProps = dispatch => ({
 	fetchCurrentUserSuccess: user => dispatch(fetchCurrentUserSuccess(user)),
 	fetchCollectionsSuccess: menus => dispatch(fetchCollectionsSuccess(menus)),
-	fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
 	fetchCollectionsFailure: error => dispatch(fetchCollectionsFailure(error)),
 	fetchAllUsersStart: () => dispatch(fetchAllUsersStart()),
 });

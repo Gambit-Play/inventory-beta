@@ -13,3 +13,8 @@ export const selectIsFetching = createSelector(
 	[selectMenus],
 	menus => menus.isFetching
 );
+
+export const selectSingleMenu = menuId =>
+	createSelector([selectCurrentMenus], currentMenus =>
+		currentMenus.find(menu => menu.id === menuId)
+	);

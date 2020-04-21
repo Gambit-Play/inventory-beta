@@ -20,10 +20,6 @@ import { getUsersCollection } from '../../firebase/firebase.utils';
 export function* fetchAllUsersCollectioAsync() {
 	try {
 		const usersCollection = yield getUsersCollection();
-		console.log(
-			'@@ fetchAllUsersCollectioAsync - usersCollection',
-			usersCollection
-		);
 		yield put(fetchAllUsersSuccess(usersCollection));
 	} catch (error) {
 		yield put(fetchAllUsersFailure(error.message));

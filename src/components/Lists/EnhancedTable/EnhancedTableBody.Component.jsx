@@ -1,13 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+
+// Routes
+import * as ROUTES from '../../../routes/routes';
 
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
-export default function EnhancedTableBody(props) {
-	const { page, dense, rowsPerPage, rows, selected, setSelected } = props;
+const EnhancedTableBody = props => {
+	const {
+		page,
+		dense,
+		rowsPerPage,
+		rows,
+		selected,
+		setSelected,
+		history,
+	} = props;
 
 	const handleClick = (event, name) => {
 		const selectedIndex = selected.indexOf(name);
@@ -29,6 +41,10 @@ export default function EnhancedTableBody(props) {
 		setSelected(newSelected);
 	};
 
+	const handleRowClick = (event, rowId) => {
+		history.push(`${ROUTES.DETAIL}/${rowId}`);
+	};
+
 	const isSelected = name => selected.indexOf(name) !== -1;
 
 	const emptyRows =
@@ -44,7 +60,7 @@ export default function EnhancedTableBody(props) {
 					return (
 						<TableRow
 							hover
-							onClick={event => handleClick(event, row.name)}
+							onClick={event => handleRowClick(event, row.id)}
 							role='checkbox'
 							aria-checked={isItemSelected}
 							tabIndex={-1}
@@ -54,6 +70,9 @@ export default function EnhancedTableBody(props) {
 							<TableCell padding='checkbox'>
 								<Checkbox
 									checked={isItemSelected}
+									onClick={event =>
+										handleClick(event, row.name)
+									}
 									inputProps={{
 										'aria-labelledby': labelId,
 									}}
@@ -85,7 +104,7 @@ export default function EnhancedTableBody(props) {
 			)}
 		</TableBody>
 	);
-}
+};
 
 EnhancedTableBody.propTypes = {
 	order: PropTypes.string.isRequired,
@@ -97,3 +116,5 @@ EnhancedTableBody.propTypes = {
 	selected: PropTypes.array.isRequired,
 	setSelected: PropTypes.func.isRequired,
 };
+
+export default withRouter(EnhancedTableBody);

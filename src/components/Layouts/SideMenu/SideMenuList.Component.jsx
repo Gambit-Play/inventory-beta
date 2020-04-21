@@ -31,7 +31,6 @@ const MainListItems = props => {
 
 		return;
 	};
-	console.log(location);
 
 	return (
 		<div>
