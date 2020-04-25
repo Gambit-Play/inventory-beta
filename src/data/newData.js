@@ -46,4 +46,29 @@ export const UsersData = [
 	},
 ];
 
-export const ItemsData = [];
+export const ItemsData = [
+	{
+		name: 'Onions',
+		price: 1.99,
+		quantity: 20,
+		unit: 'kg',
+		createdAt: '2020-03-16T03:15:15.657Z',
+		createdBy: '4OMpNYZ1M8ejKIqrDbvhYYVpf2K3',
+	},
+	{
+		name: 'Tomatoes',
+		price: 0.99,
+		quantity: 18,
+		unit: 'kg',
+		createdAt: '2020-03-16T03:16:15.657Z',
+		createdBy: '4OMpNYZ1M8ejKIqrDbvhYYVpf2K3',
+	},
+	{
+		name: 'Cheese',
+		price: 5.99,
+		quantity: 12,
+		unit: 'kg',
+		createdAt: '2020-03-16T03:17:15.657Z',
+		createdBy: '4OMpNYZ1M8ejKIqrDbvhYYVpf2K3',
+	},
+];

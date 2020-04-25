@@ -14,6 +14,7 @@ export const selectIsFetching = createSelector(
 	menus => menus.isFetching
 );
 
+// Selects a single menu based on the 'menuId' input
 export const selectSingleMenu = menuId =>
 	createSelector([selectCurrentMenus], currentMenus =>
 		currentMenus.find(menu => menu.id === menuId)

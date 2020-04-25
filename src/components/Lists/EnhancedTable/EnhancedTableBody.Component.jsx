@@ -19,6 +19,8 @@ const EnhancedTableBody = props => {
 		selected,
 		setSelected,
 		history,
+		items,
+		menus,
 	} = props;
 
 	const handleClick = (event, name) => {
@@ -42,7 +44,8 @@ const EnhancedTableBody = props => {
 	};
 
 	const handleRowClick = (event, rowId) => {
-		history.push(`${ROUTES.DETAIL}/${rowId}`);
+		if (menus) history.push(`${ROUTES.MENUS_LIST}/${rowId}`);
+		if (items) history.push(`${ROUTES.ITEMS_LIST}/${rowId}`);
 	};
 
 	const isSelected = name => selected.indexOf(name) !== -1;
@@ -51,48 +54,87 @@ const EnhancedTableBody = props => {
 		rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 	return (
 		<TableBody>
-			{rows
-				.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-				.map((row, index) => {
-					const isItemSelected = isSelected(row.name);
-					const labelId = `enhanced-table-checkbox-${index}`;
+			{(rowsPerPage > 0
+				? rows.slice(
+						page * rowsPerPage,
+						page * rowsPerPage + rowsPerPage
+				  )
+				: rows
+			).map((row, index) => {
+				const isItemSelected = isSelected(row.name);
+				const labelId = `enhanced-table-checkbox-${index}`;
 
-					return (
-						<TableRow
-							hover
+				return (
+					<TableRow
+						hover
+						aria-checked={isItemSelected}
+						tabIndex={-1}
+						key={row.id}
+						selected={isItemSelected}
+					>
+						<TableCell padding='checkbox'>
+							<Checkbox
+								checked={isItemSelected}
+								onClick={event => handleClick(event, row.name)}
+								inputProps={{
+									'aria-labelledby': labelId,
+								}}
+							/>
+						</TableCell>
+						<TableCell
+							component='th'
+							id={labelId}
+							scope='row'
+							padding='none'
 							onClick={event => handleRowClick(event, row.id)}
-							role='checkbox'
-							aria-checked={isItemSelected}
-							tabIndex={-1}
-							key={row.name}
-							selected={isItemSelected}
 						>
-							<TableCell padding='checkbox'>
-								<Checkbox
-									checked={isItemSelected}
-									onClick={event =>
-										handleClick(event, row.name)
-									}
-									inputProps={{
-										'aria-labelledby': labelId,
-									}}
-								/>
-							</TableCell>
+							{row.name}
+						</TableCell>
+						{menus && (
 							<TableCell
-								component='th'
-								id={labelId}
-								scope='row'
-								padding='none'
+								onClick={event => handleRowClick(event, row.id)}
 							>
-								{row.name}
+								{row.description}
 							</TableCell>
-							<TableCell>{row.description}</TableCell>
-							<TableCell align='right'>€ {row.price}</TableCell>
-							<TableCell align='right'>{row.createdBy}</TableCell>
-							<TableCell align='right'>{row.createdAt}</TableCell>
-						</TableRow>
-					);
-				})}
+						)}
+						<TableCell
+							align='right'
+							onClick={event => handleRowClick(event, row.id)}
+						>
+							€ {row.price}
+						</TableCell>
+						{items && (
+							<TableCell
+								align='right'
+								onClick={event => handleRowClick(event, row.id)}
+							>
+								{row.quantity}
+							</TableCell>
+						)}
+						{items && (
+							<TableCell
+								align='right'
+								onClick={event => handleRowClick(event, row.id)}
+							>
+								{row.unit}
+							</TableCell>
+						)}
+
+						<TableCell
+							align='right'
+							onClick={event => handleRowClick(event, row.id)}
+						>
+							{row.createdBy}
+						</TableCell>
+						<TableCell
+							align='right'
+							onClick={event => handleRowClick(event, row.id)}
+						>
+							{row.createdAt}
+						</TableCell>
+					</TableRow>
+				);
+			})}
 			{emptyRows > 0 && (
 				<TableRow
 					style={{

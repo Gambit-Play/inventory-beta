@@ -1,5 +1,8 @@
 export const LANDING = '/';
-export const LIST = '/list';
+export const MENUS_LIST = '/menus-list';
+export const NEW_MENU = 'new-menu';
+export const ITEMS_LIST = '/items-list';
+export const NEW_ITEM = 'new-item';
 export const DETAIL = '/detail';
 export const TABLE = '/tables';
 export const SIGN_UP = '/signup';

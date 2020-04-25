@@ -21,6 +21,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 
 const MainListItems = props => {
 	const { location } = props;
+
 	const isCurrent = linkLocation => {
 		if (linkLocation === location.pathname) return true;
 
@@ -57,27 +58,32 @@ const MainListItems = props => {
 				<ListItemText primary='Tables' />
 			</ListItem>
 			<ListItem
-				selected={isCurrent(ROUTES.LIST) ? true : false}
+				selected={isCurrent(ROUTES.MENUS_LIST) ? true : false}
 				button
 				component={Link}
-				to={ROUTES.LIST}
+				to={ROUTES.MENUS_LIST}
 			>
 				<ListItemIcon>
-					<PeopleIcon color={iconActive(ROUTES.LIST)} />
+					<PeopleIcon color={iconActive(ROUTES.MENUS_LIST)} />
 				</ListItemIcon>
-				<ListItemText primary='List' />
+				<ListItemText primary='Menus List' />
 			</ListItem>
-			<ListItem button>
+			<ListItem
+				selected={isCurrent(ROUTES.ITEMS_LIST) ? true : false}
+				button
+				component={Link}
+				to={ROUTES.ITEMS_LIST}
+			>
 				<ListItemIcon>
-					<BarChartIcon />
+					<BarChartIcon color={iconActive(ROUTES.ITEMS_LIST)} />
 				</ListItemIcon>
-				<ListItemText primary='Reports' />
+				<ListItemText primary='Items List' />
 			</ListItem>
 			<ListItem button>
 				<ListItemIcon>
 					<LayersIcon />
 				</ListItemIcon>
-				<ListItemText primary='Integrations' />
+				<ListItemText primary='--Integrations--' />
 			</ListItem>
 		</div>
 	);
@@ -90,19 +96,19 @@ const SecondaryListItems = (
 			<ListItemIcon>
 				<AssignmentIcon />
 			</ListItemIcon>
-			<ListItemText primary='Current month' />
+			<ListItemText primary='--Current month--' />
 		</ListItem>
 		<ListItem button>
 			<ListItemIcon>
 				<AssignmentIcon />
 			</ListItemIcon>
-			<ListItemText primary='Last quarter' />
+			<ListItemText primary='--Last quarter--' />
 		</ListItem>
 		<ListItem button>
 			<ListItemIcon>
 				<AssignmentIcon />
 			</ListItemIcon>
-			<ListItemText primary='Year-end sale' />
+			<ListItemText primary='--Year-end sale--' />
 		</ListItem>
 	</div>
 );
@@ -111,12 +117,11 @@ const SideMenuList = ({ match, location, history }) => {
 	return (
 		<React.Fragment>
 			<List>
-				{' '}
 				<MainListItems
 					history={history}
 					match={match}
 					location={location}
-				/>{' '}
+				/>
 			</List>
 			<Divider />
 			<List> {SecondaryListItems} </List>

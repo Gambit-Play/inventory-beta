@@ -1,31 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import orderData from 'lodash/orderBy';
+
+// Routes
+import * as ROUTES from '../../routes/routes';
 
 // Redux
 import { connect } from 'react-redux';
-import {
-	fetchCollectionsSuccess,
-	fetchCollectionsStart,
-	fetchCollectionsFailure,
-	removeCollectionListener,
-} from '../../../redux/menus/menus.actions';
+import { compose } from 'redux';
+import * as menusActions from '../../redux/menus/menus.actions';
 
 // Selectors
 import { createStructuredSelector } from 'reselect';
-import {
-	selectCurrentMenus,
-	selectIsFetching,
-} from '../../../redux/menus/menus.selectors';
-import { selectAllUsers } from '../../../redux/user/user.selectors';
+import * as menusSelectors from '../../redux/menus/menus.selectors';
+import * as userSelectors from '../../redux/user/user.selectors';
 
 // Firebase Utils
-import { updateDataWithUsersName } from '../../../utils/global-utils';
+import { updateDataWithUsersName } from '../../utils/global-utils';
+import * as COLLECTION_IDS from '../../firebase/collections.ids';
 
-import { headCells } from '../../../data/Data';
+import { menusHeadCells } from '../../data/Data';
 
-import EnhancedTableHead from './EnhancedTableHead.Component';
-import EnhancedTableToolbar from './EnhancedTableToolbar.Component';
-import EnhancedTableBody from './EnhancedTableBody.Component';
+import EnhancedTableHead from '../Lists/EnhancedTable/EnhancedTableHead.Component';
+import EnhancedTableToolbar from '../Lists/EnhancedTable/EnhancedTableToolbar.Component';
+import EnhancedTableBody from '../Lists/EnhancedTable/EnhancedTableBody.Component';
 
 import Table from '@material-ui/core/Table';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -38,30 +36,17 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import AddIcon from '@material-ui/icons/Add';
 
-import useStyles from './EnhancedTable.Styles';
+import useStyles from '../Lists/EnhancedTable/EnhancedTable.Styles';
 
-const EnhancedTable = props => {
-	const {
-		fetchCollectionsStart,
-		removeCollectionListener,
-		menus,
-		isFetching,
-		allUsers,
-	} = props;
+const MenuList = props => {
+	const { menus, isFetching, allUsers, history } = props;
 	const classes = useStyles();
-	const [order, setOrder] = React.useState('asc');
-	const [orderBy, setOrderBy] = React.useState('name');
-	const [selected, setSelected] = React.useState([]);
-	const [page, setPage] = React.useState(0);
-	const [dense, setDense] = React.useState(false);
-	const [rowsPerPage, setRowsPerPage] = React.useState(5);
-	useEffect(() => {
-		fetchCollectionsStart('Menus');
-
-		return () => {
-			removeCollectionListener();
-		};
-	}, [fetchCollectionsStart, removeCollectionListener]);
+	const [order, setOrder] = useState('asc');
+	const [orderBy, setOrderBy] = useState('name');
+	const [selected, setSelected] = useState([]);
+	const [page, setPage] = useState(0);
+	const [dense, setDense] = useState(false);
+	const [rowsPerPage, setRowsPerPage] = useState(5);
 
 	// This code is used to determin which column to sort.
 	// It checks first to see if it´s a number.
@@ -106,11 +91,14 @@ const EnhancedTable = props => {
 	const handleChangeDense = event => {
 		setDense(event.target.checked);
 	};
+	const handleFabClick = () => {
+		history.push(`${ROUTES.MENUS_LIST}/${ROUTES.NEW_MENU}`);
+	};
 
 	return (
 		<div className={classes.root}>
 			<Paper className={classes.paper}>
-				<EnhancedTableToolbar numSelected={selected.length} />
+				<EnhancedTableToolbar numSelected={selected.length} menus />
 
 				{isFetching ? (
 					<div className={classes.loaderContainer}>
@@ -132,7 +120,8 @@ const EnhancedTable = props => {
 								onSelectAllClick={handleSelectAllClick}
 								onRequestSort={handleRequestSort}
 								rowCount={rows.length}
-								headCells={headCells}
+								headCells={menusHeadCells}
+								menus
 							/>
 							<EnhancedTableBody
 								order={order}
@@ -143,13 +132,19 @@ const EnhancedTable = props => {
 								rows={rows}
 								selected={selected}
 								setSelected={setSelected}
+								menus
 							/>
 						</Table>
 					</TableContainer>
 				)}
 
 				<TablePagination
-					rowsPerPageOptions={[5, 10, 25]}
+					rowsPerPageOptions={[
+						5,
+						10,
+						25,
+						{ label: 'All', value: -1 },
+					]}
 					component='div'
 					count={rows.length}
 					rowsPerPage={rowsPerPage}
@@ -164,25 +159,22 @@ const EnhancedTable = props => {
 				}
 				label='Dense padding'
 			/>
-			<Fab color='secondary' aria-label='add' className={classes.fab}>
+			<Fab
+				color='secondary'
+				aria-label='add'
+				className={classes.fab}
+				onClick={handleFabClick}
+			>
 				<AddIcon />
 			</Fab>
 		</div>
 	);
 };
 
-const mapDispatchToProps = dispatch => ({
-	fetchCollectionsSuccess: menus => dispatch(fetchCollectionsSuccess(menus)),
-	fetchCollectionsStart: collectionId =>
-		dispatch(fetchCollectionsStart(collectionId)),
-	fetchCollectionsFailure: error => dispatch(fetchCollectionsFailure(error)),
-	removeCollectionListener: () => dispatch(removeCollectionListener()),
-});
-
 const mapStateToProps = createStructuredSelector({
-	menus: selectCurrentMenus,
-	isFetching: selectIsFetching,
-	allUsers: selectAllUsers,
+	menus: menusSelectors.selectCurrentMenus,
+	isFetching: menusSelectors.selectIsFetching,
+	allUsers: userSelectors.selectAllUsers,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EnhancedTable);
+export default compose(withRouter, connect(mapStateToProps))(MenuList);

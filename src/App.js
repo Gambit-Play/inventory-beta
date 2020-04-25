@@ -6,22 +6,25 @@ import * as ROUTES from './routes/routes';
 
 // Redux
 import { connect } from 'react-redux';
-import { fetchCurrentUserSuccess } from './redux/user/user.actions';
-import {
-	fetchCollectionsSuccess,
-	fetchCollectionsFailure,
-} from './redux/menus/menus.actions';
-import { fetchAllUsersStart } from './redux/user/user.actions';
+import * as userActions from './redux/user/user.actions';
+import * as menusActions from './redux/menus/menus.actions';
+import * as itemsActions from './redux/items/items.actions';
 
 // Data
-// import { MenusData } from './data/newData';
+// import { MenusData, ItemsData } from './data/newData';
 
 // Firebase
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import {
+	auth,
+	createUserProfileDocument,
+	// addCollectionAndDocument,
+} from './firebase/firebase.utils';
+// import * as COLLECTION_IDS from './firebase/collections.ids';
 
 // Components
 import SideMenu from './components/Layouts/SideMenu/SideMenu.Component';
-import EnhancedTable from './components/Lists/EnhancedTable/EnhancedTable.Component';
+import MenuList from './components/MenuList/MenuList.Component';
+import ItemsList from './components/ItemsList/ItemsList.Component';
 import Detail from './components/Details/Detail.Component';
 import SelectTable from './components/SelectTable/SelectTable.Component';
 import MainContainer from './components/StyledComponents/MainContainer/MainContainer.component';
@@ -30,7 +33,12 @@ class App extends React.Component {
 	unsubscribeFromAuth = null;
 
 	componentDidMount() {
-		const { fetchCurrentUserSuccess, fetchAllUsersStart } = this.props;
+		const {
+			fetchCurrentUserSuccess,
+			fetchAllUsersStart,
+			fetchItemsCollectionStart,
+			fetchCollectionsStart,
+		} = this.props;
 
 		this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
 			if (userAuth) {
@@ -58,13 +66,21 @@ class App extends React.Component {
 		});
 
 		fetchAllUsersStart();
+		fetchCollectionsStart();
+		fetchItemsCollectionStart();
 
 		// Unquote the code below, if you want to create a new "Menus" collection in firebase.
-		// addCollectionAndDocument('Menus', MenusData);
+		// addCollectionAndDocument(COLLECTION_IDS.ITEMS, ItemsData);
 	}
 
 	componentWillUnmount() {
+		const {
+			removeCollectionListener,
+			removeItemsCollectionListener,
+		} = this.props;
 		this.unsubscribeFromAuth();
+		removeCollectionListener();
+		removeItemsCollectionListener();
 	}
 
 	render() {
@@ -74,11 +90,21 @@ class App extends React.Component {
 					<MainContainer>
 						<SideMenu>
 							<Route
-								path={ROUTES.LIST}
-								component={EnhancedTable}
+								exact
+								path={ROUTES.MENUS_LIST}
+								component={MenuList}
 							/>
 							<Route
-								path={`${ROUTES.DETAIL}/:menuId`}
+								exact
+								path={ROUTES.ITEMS_LIST}
+								component={ItemsList}
+							/>
+							<Route
+								path={`${ROUTES.MENUS_LIST}/:menuId`}
+								component={Detail}
+							/>
+							<Route
+								path={`${ROUTES.ITEMS_LIST}/:itemId`}
 								component={Detail}
 							/>
 							<Route
@@ -99,10 +125,24 @@ class App extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-	fetchCurrentUserSuccess: user => dispatch(fetchCurrentUserSuccess(user)),
-	fetchCollectionsSuccess: menus => dispatch(fetchCollectionsSuccess(menus)),
-	fetchCollectionsFailure: error => dispatch(fetchCollectionsFailure(error)),
-	fetchAllUsersStart: () => dispatch(fetchAllUsersStart()),
+	// Start
+	fetchItemsCollectionStart: () =>
+		dispatch(itemsActions.fetchItemsCollectionStart()),
+	fetchCollectionsStart: () => dispatch(menusActions.fetchCollectionsStart()),
+	fetchAllUsersStart: () => dispatch(userActions.fetchAllUsersStart()),
+	// Success
+	fetchCurrentUserSuccess: user =>
+		dispatch(userActions.fetchCurrentUserSuccess(user)),
+	fetchCollectionsSuccess: menus =>
+		dispatch(menusActions.fetchCollectionsSuccess(menus)),
+	// Failure
+	fetchCollectionsFailure: error =>
+		dispatch(menusActions.fetchCollectionsFailure(error)),
+	// Listeners
+	removeCollectionListener: () =>
+		dispatch(menusActions.removeCollectionListener()),
+	removeItemsCollectionListener: () =>
+		dispatch(itemsActions.removeItemsCollectionListener()),
 });
 
 export default connect(null, mapDispatchToProps)(App);

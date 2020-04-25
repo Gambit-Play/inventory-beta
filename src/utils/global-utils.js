@@ -23,14 +23,31 @@ export const convertToFloat = input => {
 
 // Changes the property 'createdBy' from user id to displayName
 export const updateDataWithUsersName = (userCollection, doc) => {
-	const idUser = user => {
-		return user.id === doc.createdBy;
-	};
-	const user = userCollection.find(idUser);
-	const updatedDoc = {
-		...doc,
-		createdBy: user.displayName,
-	};
+	const hasUpdatedBy = doc.hasOwnProperty('updatedBy');
+	if (hasUpdatedBy) {
+		const idUser = user => {
+			return user.id === doc.updatedBy;
+		};
+		const user = userCollection.find(idUser);
+		const updatedByDoc = {
+			...doc,
+			createdBy: user.displayName,
+			updatedBy: user.displayName,
+		};
 
-	return updatedDoc;
+		return updatedByDoc;
+	}
+
+	if (!hasUpdatedBy) {
+		const idUser = user => {
+			return user.id === doc.createdBy;
+		};
+		const user = userCollection.find(idUser);
+		const createdByDoc = {
+			...doc,
+			createdBy: user.displayName,
+		};
+
+		return createdByDoc;
+	}
 };

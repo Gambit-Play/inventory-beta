@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
+import * as COLLECTION_IDS from './collections.ids';
 
 /* ================================================================ */
 /*  Initializing Firebase Process                                   */
@@ -63,6 +64,21 @@ export const createUserProfileDocument = async (userAuth, otherData) => {
 	return userRef;
 };
 
+export const updateDocument = async (collectionId, documentId, data) => {
+	if (!collectionId || !documentId)
+		console.error('Please provide all the inputs');
+
+	console.log('@@ updarteDocument - collectionId: ', collectionId);
+	console.log('@@ updarteDocument - documentId: ', documentId);
+	console.log('@@ updarteDocument - data: ', data);
+
+	const res = await firestore
+		.collection(collectionId)
+		.doc(documentId)
+		.set(data);
+	console.log('@@ updarteDocument - res: ', res);
+};
+
 export const addCollectionAndDocument = async (collectionId, documents) => {
 	const collectionRef = firestore.collection(collectionId);
 	const batch = firestore.batch();
@@ -109,7 +125,7 @@ export const getCollection = async collectionId => {
 };
 
 export const getUsersCollection = async () => {
-	const usersRef = await getCollection('Users');
+	const usersRef = await getCollection(COLLECTION_IDS.USERS);
 	const snapshot = await usersRef.get();
 	const data = snapshot.docs.map(doc => {
 		return { id: doc.id, ...doc.data() };

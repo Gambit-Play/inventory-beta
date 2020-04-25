@@ -1,8 +1,7 @@
 import MenusActionTypes from './menus.types';
 
-export const fetchCollectionsStart = collectionId => ({
+export const fetchCollectionsStart = () => ({
 	type: MenusActionTypes.FETCH_COLLECTIONS_START,
-	payload: collectionId,
 });
 
 export const fetchCollectionsUpdate = () => ({

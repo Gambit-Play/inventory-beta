@@ -1,10 +1,10 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects';
 
 // Action Types
-import MenusActionTypes from './menus.types';
+import ItemsActionTypes from './items.types';
 
 // Actions
-import * as actions from './menus.actions';
+import * as actions from './items.actions';
 
 // Firebase utils
 import { getCollection } from '../../firebase/firebase.utils';
@@ -17,30 +17,30 @@ import { sagaMiddleware } from '../store';
 /*  Actions                                                         */
 /* ================================================================ */
 let unsubscribe;
-export function* fetchCollectionAsync() {
+export function* fetchItemsCollectionAsync() {
 	try {
-		const collectionRef = yield getCollection(COLLECTION_IDS.MENUS);
+		const collectionRef = yield getCollection(COLLECTION_IDS.ITEMS);
 		unsubscribe = yield collectionRef.onSnapshot(snapshot => {
 			// This 'sagaMiddleware' makes it possible to run sagas within a callback
 			// Calls the 'fetchCollectionsUpdate' function generator when the 'onSnapshot' fires
-			sagaMiddleware.run(fetchCurrentMenus);
+			sagaMiddleware.run(fetchCurrentItems);
 
 			const data = snapshot.docs.map(doc => doc.data());
 
 			// Calls the success function generator depending on the 'collectionId'
-			sagaMiddleware.run(fetchCurrentMenus, data);
+			sagaMiddleware.run(fetchCurrentItems, data);
 		});
 	} catch (error) {
-		yield put(actions.fetchCollectionsFailure(error.message));
+		yield put(actions.fetchItemsCollectionFailure(error.message));
 	}
 }
 
-export function* fetchCurrentMenus(data) {
-	if (!data) yield put(actions.fetchCollectionsUpdate());
-	if (data) yield put(actions.fetchCollectionsSuccess(data));
+export function* fetchCurrentItems(data) {
+	if (!data) yield put(actions.fetchItemsCollectionUpdate());
+	if (data) yield put(actions.fetchItemsCollectionSuccess(data));
 }
 
-export function* removeCollectionListener() {
+export function* removeItemsCollectionListener() {
 	yield call(unsubscribe);
 }
 
@@ -48,17 +48,17 @@ export function* removeCollectionListener() {
 /*  Listeners                                                       */
 /* ================================================================ */
 
-export function* fetchCollectionStart() {
+export function* fetchItemsCollectionStart() {
 	yield takeLatest(
-		MenusActionTypes.FETCH_COLLECTIONS_START,
-		fetchCollectionAsync
+		ItemsActionTypes.FETCH_ITEMS_COLLECTIONS_START,
+		fetchItemsCollectionAsync
 	);
 }
 
 export function* removeListenerStart() {
 	yield takeLatest(
-		MenusActionTypes.REMOVE_COLLECTION_LISTENER,
-		removeCollectionListener
+		ItemsActionTypes.REMOVE_ITEMS_COLLECTION_LISTENER,
+		removeItemsCollectionListener
 	);
 }
 
@@ -66,6 +66,6 @@ export function* removeListenerStart() {
 /*  Root Saga                                                       */
 /* ================================================================ */
 
-export default function* menusSagas() {
-	yield all([call(fetchCollectionStart), call(removeListenerStart)]);
+export default function* itemsSagas() {
+	yield all([call(fetchItemsCollectionStart), call(removeListenerStart)]);
 }

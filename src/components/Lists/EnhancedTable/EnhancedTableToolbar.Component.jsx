@@ -15,7 +15,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 const useToolbarStyles = makeStyles(theme => ({
 	root: {
 		paddingLeft: theme.spacing(2),
-		paddingRight: theme.spacing(1)
+		paddingRight: theme.spacing(1),
 	},
 	highlight:
 		theme.palette.type === 'light'
@@ -24,28 +24,28 @@ const useToolbarStyles = makeStyles(theme => ({
 					backgroundColor: lighten(
 						theme.palette.secondary.light,
 						0.85
-					)
+					),
 			  }
 			: {
 					color: theme.palette.text.primary,
-					backgroundColor: theme.palette.secondary.dark
+					backgroundColor: theme.palette.secondary.dark,
 			  },
 	title: {
-		flex: '1 1 100%'
+		flex: '1 1 100%',
 	},
 	searchField: {
-		paddingRight: theme.spacing(2)
-	}
+		paddingRight: theme.spacing(2),
+	},
 }));
 
 export default function EnhancedTableToolbar(props) {
 	const classes = useToolbarStyles();
-	const { numSelected } = props;
+	const { numSelected, items, menus } = props;
 
 	return (
 		<Toolbar
 			className={clsx(classes.root, {
-				[classes.highlight]: numSelected > 0
+				[classes.highlight]: numSelected > 0,
 			})}
 		>
 			{numSelected > 0 ? (
@@ -62,7 +62,8 @@ export default function EnhancedTableToolbar(props) {
 					variant='h6'
 					id='tableTitle'
 				>
-					Nutrition
+					{items && 'Items'}
+					{menus && 'Menus'}
 				</Typography>
 			)}
 			<TextField
@@ -89,5 +90,5 @@ export default function EnhancedTableToolbar(props) {
 }
 
 EnhancedTableToolbar.propTypes = {
-	numSelected: PropTypes.number.isRequired
+	numSelected: PropTypes.number.isRequired,
 };

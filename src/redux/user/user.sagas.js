@@ -4,7 +4,7 @@ import { takeLatest, put, all, call } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
 
 // Actions
-import { fetchAllUsersFailure, fetchAllUsersSuccess } from './user.actions';
+import * as actions from './user.actions';
 
 // Firebase utils
 import { getUsersCollection } from '../../firebase/firebase.utils';
@@ -17,12 +17,12 @@ import { getUsersCollection } from '../../firebase/firebase.utils';
 /*  Actions                                                         */
 /* ================================================================ */
 
-export function* fetchAllUsersCollectioAsync() {
+export function* fetchAllUsersCollectionAsync() {
 	try {
 		const usersCollection = yield getUsersCollection();
-		yield put(fetchAllUsersSuccess(usersCollection));
+		yield put(actions.fetchAllUsersSuccess(usersCollection));
 	} catch (error) {
-		yield put(fetchAllUsersFailure(error.message));
+		yield put(actions.fetchAllUsersFailure(error.message));
 	}
 }
 
@@ -30,10 +30,10 @@ export function* fetchAllUsersCollectioAsync() {
 /*  Listeners                                                       */
 /* ================================================================ */
 
-export function* fetchCollectionStart() {
+export function* fetchAllUsersCollectioStart() {
 	yield takeLatest(
 		UserActionTypes.FETCH_ALL_USERS_START,
-		fetchAllUsersCollectioAsync
+		fetchAllUsersCollectionAsync
 	);
 }
 
@@ -42,5 +42,5 @@ export function* fetchCollectionStart() {
 /* ================================================================ */
 
 export default function* userSagas() {
-	yield all([call(fetchCollectionStart)]);
+	yield all([call(fetchAllUsersCollectioStart)]);
 }
