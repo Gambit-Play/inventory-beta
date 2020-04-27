@@ -9,10 +9,9 @@ import { convertToFloat } from '../../utils/global-utils';
 
 // Selectors
 import { createStructuredSelector } from 'reselect';
-import { selectCurrentUser } from '../../redux/user/user.selectors';
-import { selectSingleMenu } from '../../redux/menus/menus.selectors';
-import { selectSingleItem } from '../../redux/items/items.selectors';
-
+import * as userSelectors from '../../redux/user/user.selectors';
+import * as menusSelectors from '../../redux/menus/menus.selectors';
+import * as itemsSelectors from '../../redux/items/items.selectors';
 // Routes
 import * as ROUTES from '../../routes/routes';
 
@@ -22,6 +21,9 @@ import {
 	updateDocument,
 } from '../../firebase/firebase.utils';
 import * as COLLECTION_IDS from '../../firebase/collections.ids';
+
+// Components
+import CheckboxesTags from '../CheckboxesTags/CheckboxesTags.Component';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -80,7 +82,7 @@ const NumberFormatter = props => {
 	);
 };
 
-const Detail = ({ currentUser, history, match, menu, item }) => {
+const Detail = ({ currentUser, history, match, menu, item, items }) => {
 	const classes = useStyles();
 	const [errors, setErrors] = useState({
 		errorPrice: '',
@@ -332,6 +334,9 @@ const Detail = ({ currentUser, history, match, menu, item }) => {
 									}}
 								/>
 							</Grid>
+							<Grid item xs={6}>
+								<CheckboxesTags data={items} />
+							</Grid>
 							<Grid item xs={12}>
 								<TextField
 									id='description'
@@ -471,9 +476,10 @@ const Detail = ({ currentUser, history, match, menu, item }) => {
 
 const mapStateToProps = (state, ownProps) =>
 	createStructuredSelector({
-		currentUser: selectCurrentUser,
-		menu: selectSingleMenu(ownProps.match.params.menuId),
-		item: selectSingleItem(ownProps.match.params.itemId),
+		currentUser: userSelectors.selectCurrentUser,
+		menu: menusSelectors.selectSingleMenu(ownProps.match.params.menuId),
+		item: itemsSelectors.selectSingleItem(ownProps.match.params.itemId),
+		items: itemsSelectors.selectCurrentItems,
 	});
 
 export default compose(withRouter, connect(mapStateToProps))(Detail);
