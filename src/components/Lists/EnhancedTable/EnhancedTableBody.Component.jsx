@@ -163,7 +163,6 @@ const EnhancedTableBody = props => {
 					>{`Total Cost: €${parseFloat(itemsTotal).toFixed(
 						2
 					)}`}</Typography>
-					{'Test'}
 				</TableCell>
 			</TableRow>
 		</TableBody>
