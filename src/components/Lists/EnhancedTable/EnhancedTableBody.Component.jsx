@@ -162,7 +162,7 @@ const EnhancedTableBody = props => {
 						color='error'
 					>{`Total Cost: €${parseFloat(itemsTotal).toFixed(
 						2
-					)}`}</Typography>{' '}
+					)}`}</Typography>
 				</TableCell>
 			</TableRow>
 		</TableBody>
