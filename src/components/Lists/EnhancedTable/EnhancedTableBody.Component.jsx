@@ -178,6 +178,10 @@ EnhancedTableBody.propTypes = {
 	rows: PropTypes.array.isRequired,
 	selected: PropTypes.array.isRequired,
 	setSelected: PropTypes.func.isRequired,
+	history: PropTypes.object.isRequired,
+	items: PropTypes.bool,
+	menus: PropTypes.bool,
+	itemsTotal: PropTypes.number.isRequired,
 };
 
 export default withRouter(EnhancedTableBody);
