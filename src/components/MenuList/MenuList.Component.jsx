@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import orderData from 'lodash/orderBy';
 
@@ -8,7 +8,6 @@ import * as ROUTES from '../../routes/routes';
 // Redux
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import * as menusActions from '../../redux/menus/menus.actions';
 
 // Selectors
 import { createStructuredSelector } from 'reselect';
@@ -17,7 +16,6 @@ import * as userSelectors from '../../redux/user/user.selectors';
 
 // Firebase Utils
 import { updateDataWithUsersName } from '../../utils/global-utils';
-import * as COLLECTION_IDS from '../../firebase/collections.ids';
 
 import { menusHeadCells } from '../../data/Data';
 
@@ -157,7 +155,7 @@ const MenuList = props => {
 				control={
 					<Switch checked={dense} onChange={handleChangeDense} />
 				}
-				label='Dense padding'
+				label='Compact List'
 			/>
 			<Fab
 				color='secondary'

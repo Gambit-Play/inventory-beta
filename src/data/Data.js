@@ -79,6 +79,12 @@ export const itemsHeadCells = [
 		label: 'Quantity',
 	},
 	{
+		id: 'cost',
+		numeric: true,
+		disablePadding: false,
+		label: 'Cost',
+	},
+	{
 		id: 'unit',
 		numeric: true,
 		disablePadding: false,

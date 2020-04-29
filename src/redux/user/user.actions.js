@@ -4,17 +4,25 @@ import UserActionTypes from './user.types';
 /*  Current User Actions                                            */
 /* ================================================================ */
 export const fetchCurrentUserStart = () => ({
-	type: UserActionTypes.FETCH_USER_START,
+	type: UserActionTypes.GOOGLE_SIGNIN_START,
 });
 
 export const fetchCurrentUserSuccess = user => ({
-	type: UserActionTypes.FETCH_USER_SUCCESS,
+	type: UserActionTypes.GOOGLE_SIGNIN_SUCCESS,
 	payload: user,
 });
 
 export const fetchCurrentUserFailure = errorMessage => ({
-	type: UserActionTypes.FETCH_USER_FAILURE,
+	type: UserActionTypes.GOOGLE_SIGNIN_FAILURE,
 	payload: errorMessage,
+});
+
+export const userGoogleLogoutStart = () => ({
+	type: UserActionTypes.GOOGLE_SIGNOUT_START,
+});
+
+export const removeUserListener = () => ({
+	type: UserActionTypes.REMOVE_USER_LISTENER,
 });
 
 /* ================================================================ */

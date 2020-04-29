@@ -30,6 +30,13 @@ const itemsReducer = (state = INITIAL_STATE, action) => {
 				isFetching: false,
 				errorMessage: action.payload,
 			};
+		case ItemsActionTypes.CLEAR_ITEMS_COLLECTIONS:
+			return {
+				...state,
+				currentItems: null,
+				isFetching: false,
+				errorMessage: undefined,
+			};
 		default:
 			return state;
 	}

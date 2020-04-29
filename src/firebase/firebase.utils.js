@@ -68,10 +68,6 @@ export const updateDocument = async (collectionId, documentId, data) => {
 	if (!collectionId || !documentId)
 		console.error('Please provide all the inputs');
 
-	console.log('@@ updarteDocument - collectionId: ', collectionId);
-	console.log('@@ updarteDocument - documentId: ', documentId);
-	console.log('@@ updarteDocument - data: ', data);
-
 	const res = await firestore
 		.collection(collectionId)
 		.doc(documentId)
@@ -150,6 +146,7 @@ export const googleProvider = new firebase.auth.GoogleAuthProvider();
 // googleProvider.addScope('profile');
 // googleProvider.addScope('email');
 export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
+export const signOutFromGoogle = () => auth.signOut();
 
 /* ================================================================ */
 

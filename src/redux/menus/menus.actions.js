@@ -1,21 +1,25 @@
 import MenusActionTypes from './menus.types';
 
 export const fetchCollectionsStart = () => ({
-	type: MenusActionTypes.FETCH_COLLECTIONS_START,
+	type: MenusActionTypes.FETCH_MENUS_COLLECTIONS_START,
 });
 
 export const fetchCollectionsUpdate = () => ({
-	type: MenusActionTypes.FETCH_COLLECTIONS_UPDATE,
+	type: MenusActionTypes.FETCH_MENUS_COLLECTIONS_UPDATE,
 });
 
 export const fetchCollectionsSuccess = menus => ({
-	type: MenusActionTypes.FETCH_COLLECTIONS_SUCCESS,
+	type: MenusActionTypes.FETCH_MENUS_COLLECTIONS_SUCCESS,
 	payload: menus,
 });
 
 export const fetchCollectionsFailure = errorMessage => ({
-	type: MenusActionTypes.FETCH_COLLECTIONS_FAILURE,
+	type: MenusActionTypes.FETCH_MENUS_COLLECTIONS_FAILURE,
 	payload: errorMessage,
+});
+
+export const clearMenusStart = () => ({
+	type: MenusActionTypes.CLEAR_MENUS_COLLECTIONS,
 });
 
 export const removeCollectionListener = () => ({

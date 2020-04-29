@@ -9,6 +9,7 @@ import { selectCurrentUser } from '../../../redux/user/user.selectors';
 // Redux
 import { connect } from 'react-redux';
 import { toggleSidemenu } from '../../../redux/ui/ui.actions';
+import * as actions from '../../../redux/user/user.actions';
 
 import SideMenuList from './SideMenuList.Component';
 
@@ -23,16 +24,21 @@ import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
-// Firebase
-import { signInWithGoogle } from '../../../firebase/firebase.utils';
-
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
+import PowerSettingsIcon from '@material-ui/icons/PowerSettingsNewOutlined';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import useStyles from './SideMenu.Styles';
 
-const SideMenu = ({ children, toggleSidemenu, open, currentUser }) => {
+const SideMenu = ({
+	children,
+	toggleSidemenu,
+	open,
+	currentUser,
+	fetchCurrentUserStart,
+	userGoogleLogoutStart,
+}) => {
 	const classes = useStyles();
 
 	const handleToggleSidemenu = () => {
@@ -82,11 +88,14 @@ const SideMenu = ({ children, toggleSidemenu, open, currentUser }) => {
 						alt='Remy Sharp'
 						src='https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
 						className={classes.avatar}
-						onClick={signInWithGoogle}
+						onClick={fetchCurrentUserStart}
 					/>
 					<Typography>
 						{currentUser && currentUser.displayName}
 					</Typography>
+					<IconButton color='inherit' onClick={userGoogleLogoutStart}>
+						<PowerSettingsIcon />
+					</IconButton>
 				</Toolbar>
 			</AppBar>
 			<Drawer
@@ -114,6 +123,8 @@ const SideMenu = ({ children, toggleSidemenu, open, currentUser }) => {
 
 const mapDispatchToProps = dispatch => ({
 	toggleSidemenu: () => dispatch(toggleSidemenu()),
+	fetchCurrentUserStart: () => dispatch(actions.fetchCurrentUserStart()),
+	userGoogleLogoutStart: () => dispatch(actions.userGoogleLogoutStart()),
 });
 
 const mapStateToProps = createStructuredSelector({

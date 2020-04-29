@@ -13,10 +13,19 @@ const userReducer = (state = INITIAL_STATE, action) => {
 		/* ================================================================ */
 		/*  Current User Reducers                                           */
 		/* ================================================================ */
-		case UserActionTypes.FETCH_USER_SUCCESS:
+		case UserActionTypes.GOOGLE_SIGNIN_SUCCESS:
 			return {
 				...state,
 				currentUser: action.payload,
+			};
+		case UserActionTypes.GOOGLE_SIGNOUT_START:
+			return {
+				...state,
+				currentUser: null,
+				allUsers: null,
+				isFetching: false,
+				errorMessageCurrentUser: undefined,
+				errorMessageAllUsers: undefined,
 			};
 		/* ================================================================ */
 		/*  All Users Reducers	                                            */

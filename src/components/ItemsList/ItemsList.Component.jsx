@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import orderData from 'lodash/orderBy';
 
@@ -8,15 +8,11 @@ import * as ROUTES from '../../routes/routes';
 // Redux
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import * as itemsActions from '../../redux/items/items.actions';
 
 // Selectors
 import { createStructuredSelector } from 'reselect';
 import * as itemsSelectors from '../../redux/items/items.selectors';
 import * as userSelectors from '../../redux/user/user.selectors';
-
-// Firebase Utils
-import * as COLLECTION_IDS from '../../firebase/collections.ids';
 
 // Global Utils
 import { updateDataWithUsersName } from '../../utils/global-utils';
@@ -42,7 +38,7 @@ import AddIcon from '@material-ui/icons/Add';
 import useStyles from '../Lists/EnhancedTable/EnhancedTable.Styles';
 
 const ItemsList = props => {
-	const { items, isFetching, allUsers, history } = props;
+	const { items, itemsTotal, isFetching, allUsers, history } = props;
 	const classes = useStyles();
 	const [order, setOrder] = useState('asc');
 	const [orderBy, setOrderBy] = useState('name');
@@ -54,7 +50,7 @@ const ItemsList = props => {
 	// It checks first to see if it´s a number.
 	// Set to lowercase to make it case insensitive.
 	const sorter =
-		orderBy === 'price'
+		orderBy === 'price' || orderBy === 'cost'
 			? orderBy
 			: menu => {
 					return menu[orderBy].toLowerCase();
@@ -138,11 +134,11 @@ const ItemsList = props => {
 								selected={selected}
 								setSelected={setSelected}
 								items
+								itemsTotal={itemsTotal}
 							/>
 						</Table>
 					</TableContainer>
 				)}
-
 				<TablePagination
 					rowsPerPageOptions={[
 						5,
@@ -162,7 +158,7 @@ const ItemsList = props => {
 				control={
 					<Switch checked={dense} onChange={handleChangeDense} />
 				}
-				label='Dense padding'
+				label='Compact List'
 			/>
 			<Fab
 				color='secondary'
@@ -177,6 +173,7 @@ const ItemsList = props => {
 };
 const mapStateToProps = createStructuredSelector({
 	items: itemsSelectors.selectCurrentItems,
+	itemsTotal: itemsSelectors.selectItemsTotal,
 	isFetching: itemsSelectors.selectIsFetching,
 	allUsers: userSelectors.selectAllUsers,
 });

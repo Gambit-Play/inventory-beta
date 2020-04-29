@@ -23,8 +23,8 @@ const useStyles = makeStyles(theme => ({
 		}),
 	},
 	toolbar: {
-		paddingRight: 24, // keep right padding when drawer closed
-		paddingLeft: 16,
+		paddingRight: theme.spacing(2), // keep right padding when drawer closed
+		paddingLeft: theme.spacing(2),
 	},
 	menuButton: {
 		marginRight: 36,

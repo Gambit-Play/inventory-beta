@@ -19,3 +19,9 @@ export const selectSingleItem = itemId =>
 	createSelector([selectCurrentItems], currentItems =>
 		currentItems.find(item => item.id === itemId)
 	);
+
+export const selectItemsTotal = createSelector(
+	[selectCurrentItems],
+	currentItems =>
+		currentItems.reduce((accCost, item) => accCost + item.cost, 0)
+);

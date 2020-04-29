@@ -18,6 +18,10 @@ export const fetchItemsCollectionFailure = errorMessage => ({
 	payload: errorMessage,
 });
 
+export const clearItemsStart = () => ({
+	type: ItemsActionTypes.CLEAR_ITEMS_COLLECTIONS,
+});
+
 export const removeItemsCollectionListener = () => ({
 	type: ItemsActionTypes.REMOVE_ITEMS_COLLECTION_LISTENER,
 });

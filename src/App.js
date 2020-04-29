@@ -89,6 +89,7 @@ class App extends React.Component {
 				<React.Fragment>
 					<MainContainer>
 						<SideMenu>
+							<Route exact path={ROUTES.LANDING} />
 							<Route
 								exact
 								path={ROUTES.MENUS_LIST}
@@ -105,11 +106,6 @@ class App extends React.Component {
 							/>
 							<Route
 								path={`${ROUTES.ITEMS_LIST}/:itemId`}
-								component={Detail}
-							/>
-							<Route
-								exact
-								path={ROUTES.DETAIL}
 								component={Detail}
 							/>
 							<Route

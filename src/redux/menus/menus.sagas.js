@@ -21,13 +21,13 @@ export function* fetchCollectionAsync() {
 	try {
 		const collectionRef = yield getCollection(COLLECTION_IDS.MENUS);
 		unsubscribe = yield collectionRef.onSnapshot(snapshot => {
-			// This 'sagaMiddleware' makes it possible to run sagas within a callback
-			// Calls the 'fetchCollectionsUpdate' function generator when the 'onSnapshot' fires
+			// This 'sagaMiddleware' makes it possible to run sagas within a callback.
+			// Calls the 'fetchCollectionsUpdate' function generator when the 'onSnapshot' fires.
 			sagaMiddleware.run(fetchCurrentMenus);
 
 			const data = snapshot.docs.map(doc => doc.data());
 
-			// Calls the success function generator depending on the 'collectionId'
+			// Calls the success function generator depending on the 'collectionId'.
 			sagaMiddleware.run(fetchCurrentMenus, data);
 		});
 	} catch (error) {
@@ -50,7 +50,7 @@ export function* removeCollectionListener() {
 
 export function* fetchCollectionStart() {
 	yield takeLatest(
-		MenusActionTypes.FETCH_COLLECTIONS_START,
+		MenusActionTypes.FETCH_MENUS_COLLECTIONS_START,
 		fetchCollectionAsync
 	);
 }

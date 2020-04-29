@@ -36,15 +36,15 @@ const MainListItems = props => {
 	return (
 		<div>
 			<ListItem
-				selected={isCurrent(ROUTES.DETAIL) ? true : false}
+				selected={isCurrent(ROUTES.LANDING) ? true : false}
 				button
 				component={Link}
-				to={ROUTES.DETAIL}
+				to={ROUTES.LANDING}
 			>
 				<ListItemIcon>
-					<DashboardIcon color={iconActive(ROUTES.DETAIL)} />
+					<DashboardIcon color={iconActive(ROUTES.LANDING)} />
 				</ListItemIcon>
-				<ListItemText primary='Detail' />
+				<ListItemText primary='Dashboard' />
 			</ListItem>
 			<ListItem
 				selected={isCurrent(ROUTES.TABLE) ? true : false}

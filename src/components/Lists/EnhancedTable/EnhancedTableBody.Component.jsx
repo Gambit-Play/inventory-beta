@@ -9,6 +9,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
+import Typography from '@material-ui/core/Typography';
 
 const EnhancedTableBody = props => {
 	const {
@@ -21,6 +22,7 @@ const EnhancedTableBody = props => {
 		history,
 		items,
 		menus,
+		itemsTotal,
 	} = props;
 
 	const handleClick = (event, name) => {
@@ -101,7 +103,7 @@ const EnhancedTableBody = props => {
 							align='right'
 							onClick={event => handleRowClick(event, row.id)}
 						>
-							€ {row.price}
+							€{parseFloat(row.price).toFixed(2)}
 						</TableCell>
 						{items && (
 							<TableCell
@@ -109,6 +111,15 @@ const EnhancedTableBody = props => {
 								onClick={event => handleRowClick(event, row.id)}
 							>
 								{row.quantity}
+							</TableCell>
+						)}
+						{items && (
+							<TableCell
+								align='right'
+								onClick={event => handleRowClick(event, row.id)}
+							>
+								{!isNaN(row.cost) &&
+									`€${parseFloat(row.cost).toFixed(2)}`}
 							</TableCell>
 						)}
 						{items && (
@@ -144,6 +155,16 @@ const EnhancedTableBody = props => {
 					<TableCell colSpan={6} />
 				</TableRow>
 			)}
+			<TableRow>
+				<TableCell colSpan={12} align='right'>
+					<Typography
+						variant='subtitle2'
+						color='error'
+					>{`Total Cost: €${parseFloat(itemsTotal).toFixed(
+						2
+					)}`}</Typography>{' '}
+				</TableCell>
+			</TableRow>
 		</TableBody>
 	);
 };

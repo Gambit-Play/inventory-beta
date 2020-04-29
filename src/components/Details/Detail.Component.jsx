@@ -144,6 +144,9 @@ const Detail = ({ currentUser, history, match, menu, item, items }) => {
 			{
 				createdAt: new Date().toISOString(),
 				createdBy: currentUser.id,
+				cost:
+					convertToFloat(itemDetails.price) *
+					parseFloat(itemDetails.quantity),
 				name: itemDetails.name,
 				price: convertToFloat(itemDetails.price),
 				quantity: parseFloat(itemDetails.quantity),
@@ -203,9 +206,15 @@ const Detail = ({ currentUser, history, match, menu, item, items }) => {
 		};
 		const updatedProductDetails = {
 			...newProductDetails,
+			cost: newProductDetails.price * newProductDetails.quantity,
 			updatedAt: new Date().toISOString(),
 			updatedBy: currentUser.id,
 		};
+
+		console.log(
+			'@@ itemUpdate - updatedProductDetails: ',
+			updatedProductDetails
+		);
 
 		updateDocument(
 			COLLECTION_IDS.ITEMS,
